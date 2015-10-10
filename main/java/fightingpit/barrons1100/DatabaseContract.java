@@ -31,13 +31,15 @@ public class DatabaseContract {
         public static final String MEANING   = "MEANING";
         public static final String FAVOURITE = "FAVOURITE";
         public static final String PROGRESS = "PROGRESS";
+        public static final String SET_NUMBER = "SET_NUMBER";
 
         public static final String CREATE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + " (" +
                 WORD + " TEXT PRIMARY KEY NOT NULL" + COMMA_SEP +
                 MEANING + " TEXT NOT NULL" + COMMA_SEP +
                 FAVOURITE + " INTEGER NOT NULL" + COMMA_SEP +
-                PROGRESS + " INTEGER NOT NULL" +
+                PROGRESS + " INTEGER NOT NULL" + COMMA_SEP +
+                SET_NUMBER + " INTEGER NOT NULL" +
                 " )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

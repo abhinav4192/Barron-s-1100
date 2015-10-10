@@ -1,60 +1,84 @@
 package fightingpit.barrons1100;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.ExpandableListActivity;
-import android.content.Context;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.Toast;
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-public class MainActivity extends ExpandableListActivity implements
-        OnChildClickListener {
+public class MainActivity extends FragmentActivity implements
+        ActionBar.TabListener {
 
-    private ExpandableListView mExpandableListView;
-    AdapterExpandableWordList mAdapterExpandableWordList;
-    List<GenericContainer> mWordList;
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    // Tab titles
+    private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initilization
+        viewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
+        actionBar = getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        // Getting all Words from DB.
-        DatabaseHelper aDBHelper = new DatabaseHelper(this);
-        mWordList = aDBHelper.getWordList();
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Creating the Meaning List
-        ArrayList<String> childItem = new ArrayList<>();
-        for(GenericContainer aWordInfo:mWordList){
-            childItem.add(aWordInfo.getMeaning());
+        // Adding Tabs
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name)
+                    .setTabListener(this));
         }
 
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-        // Putting data in List View.
-        mExpandableListView = (ExpandableListView) findViewById(android.R.id.list);
-        mAdapterExpandableWordList = new AdapterExpandableWordList(this,mWordList, childItem);
-        mAdapterExpandableWordList
-                .setInflater(
-                        (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                        this);
-        mExpandableListView.setAdapter(mAdapterExpandableWordList);
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
 
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
 
         // Loading the Advertisement.
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+    }
 
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        // on tab selected
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
     @Override
@@ -74,26 +98,5 @@ public class MainActivity extends ExpandableListActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public boolean onChildClick(ExpandableListView parent, View v,
-//                                int wordPosition, int meaningPosition, long id) {
-//        Toast.makeText(MainActivity.this, "Clicked On Child",
-//                Toast.LENGTH_SHORT).show();
-//        return true;
-//    }
-
-    public void hideMeaning(int iPosition){
-        mExpandableListView.collapseGroup(iPosition);
-    }
-
-    public void updateFavourite(int iPosition, String iWord, boolean iIsFavourite){
-        mWordList.get(iPosition).setFavourite(iIsFavourite);
-        mAdapterExpandableWordList.notifyDataSetChanged();
-        DatabaseHelper aDBHelper = new DatabaseHelper(this);
-        aDBHelper.updateFavourite(iWord,iIsFavourite);
-    }
-
-
 
 }

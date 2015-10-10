@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressWarnings("unchecked")
 public class AdapterExpandableWordList extends BaseExpandableListAdapter {
@@ -59,7 +58,7 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 // Meaning Clicked. Hide the Meaning
-                ((MainActivity) context).hideMeaning(aPosition);
+                WordListFragment.hideMeaning(aPosition);
             }
         });
         return convertView;
@@ -134,11 +133,9 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
 
                 // ImageViewClicked. Change Icon and Update DB
                 if(WordList.get(aPostion).isFavourite()){
-                    //aFavImageView.setImageResource(R.drawable.ic_star_outline_black_24dp);
-                    ((MainActivity) context).updateFavourite(aPostion,WordList.get(aPostion).getWord(),false);
+                    WordListFragment.updateFavourite(aPostion,WordList.get(aPostion).getWord(),false);
                 }else{
-                    //aFavImageView.setImageResource(R.drawable.ic_star_black_24dp);
-                    ((MainActivity) context).updateFavourite(aPostion,WordList.get(aPostion).getWord(),true);
+                    WordListFragment.updateFavourite(aPostion,WordList.get(aPostion).getWord(),true);
                 }
             }
         });
