@@ -87,6 +87,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             aReturnList.add(aContainer);
             c.moveToNext();
         }
+        c.close();
+        return aReturnList;
+    }
+
+    public List<GenericContainer> getWordListByAlphabet(String iAlphabet){
+        SQLiteDatabase db = getReadableDatabase();
+        //String[] projection = {DatabaseContract.WordListDB.FOOD_ITEM_NAME};
+        String selection = DatabaseContract.WordListDB.WORD + " like ?";
+        String[] selectionArgs = {iAlphabet + "%"};
+        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+
+        List<GenericContainer> aReturnList = new ArrayList<>();
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            GenericContainer aContainer = new GenericContainer();
+            aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
+            aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+            if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
+                aContainer.setFavourite(true);
+            }else {
+                aContainer.setFavourite(false);
+            }
+            aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+            aReturnList.add(aContainer);
+            c.moveToNext();
+        }
+        c.close();
+        return aReturnList;
+    }
+
+    public List<GenericContainer> getWordListBySet(String iSetNUmber){
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = DatabaseContract.WordListDB.SET_NUMBER + "=?";
+        String[] selectionArgs = {iSetNUmber};
+        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+
+        List<GenericContainer> aReturnList = new ArrayList<>();
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            GenericContainer aContainer = new GenericContainer();
+            aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
+            aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+            if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
+                aContainer.setFavourite(true);
+            }else {
+                aContainer.setFavourite(false);
+            }
+            aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+            aReturnList.add(aContainer);
+            c.moveToNext();
+        }
+        c.close();
         return aReturnList;
     }
 

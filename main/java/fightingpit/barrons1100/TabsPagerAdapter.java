@@ -6,9 +6,9 @@ package fightingpit.barrons1100;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class TabsPagerAdapter extends FragmentPagerAdapter {
+public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -19,18 +19,15 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
         switch (index) {
             case 0:
-                // Top Rated fragment activity
                 return new WordListFragment();
             case 1:
-                // Games fragment activity
                 return new FlashCardsFragment();
             case 2:
-                // Movies fragment activity
                 return new QuizFragment();
         }
-
         return null;
     }
+
 
     @Override
     public int getCount() {
@@ -38,4 +35,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
+    @Override
+    public int getItemPosition(Object object)
+    {
+        return POSITION_NONE;
+    }
 }
