@@ -2,5 +2,13 @@
 <item android:id="@+id/action_settings"
     android:title="Settings"
     android:icon="@drawable/ic_settings_white_24dp"
-    android:showAsAction="always"/>
-</menu>
+    android:showAsAction="always"
+    android:orderInCategory="100"/>
+
+<item android:id="@+id/action_exp_cont"
+    android:title="Expand/Contract"
+    android:icon="@drawable/ic_expand_list"
+    android:showAsAction="always"
+    android:orderInCategory="1" />
+
+    </menu>

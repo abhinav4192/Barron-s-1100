@@ -13,7 +13,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-@SuppressWarnings("unchecked")
 public class AdapterExpandableWordList extends BaseExpandableListAdapter {
 
     public List<GenericContainer> WordList ;
@@ -54,6 +53,7 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
         TextView text = (TextView) convertView.findViewById(R.id.tv_lwa_meaning);
         text.setText(aTempChild);
         final int aPosition = wordPosition;
+
         convertView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +113,7 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
         else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         // Set Word Value
         holder.WordView.setText(WordList.get(wordPosition).getWord());
         //holder.MeaningView.setText(ListData.get(position).getMeaningVal());

@@ -2,26 +2,102 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="Se">
-
-    <Button
+    android:layout_height="match_parent">
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alpha "
-        android:id="@+id/bt_as_sort_alphabetically"
+        android:layout_gravity="center"
+        android:id="@+id/iv_as_aplha"
+        android:src="@drawable/ic_alpha_icon_grey"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:onClick="sortAlphabetically"
-        android:nestedScrollingEnabled="false" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/iv_as_shuffle"
+        android:src="@drawable/ic_shuffle_icon_grey"
+        android:layout_marginRight="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Alphabetically"
+        android:id="@+id/tv_as_alpha"
+        android:layout_below="@+id/iv_as_aplha"
+        android:layout_alignLeft="@+id/iv_as_aplha"
+        android:layout_alignStart="@+id/iv_as_aplha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Shuffle"
+        android:gravity="center"
+        android:id="@+id/tv_as_shuffle"
+        android:layout_below="@+id/iv_as_shuffle"
+        android:layout_alignLeft="@+id/iv_as_shuffle"
+        android:layout_alignStart="@+id/iv_as_shuffle"
+        android:layout_alignRight="@+id/iv_as_shuffle"
+        android:layout_alignEnd="@+id/iv_as_shuffle" />
+
+
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sp_as_filter_selector"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Shuffle"
-        android:id="@+id/bt_as_shuffle"
-        android:layout_below="@+id/bt_as_sort_alphabetically"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:text="All"
+        android:id="@+id/bt_as_all"
+        android:layout_below="@+id/sp_as_filter_selector"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favourite"
+        android:id="@+id/bt_as_fav"
+        android:layout_below="@+id/bt_as_all"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unmarked"
+        android:id="@+id/bt_as_unmarked"
+        android:layout_below="@+id/bt_as_fav"
+        android:layout_alignRight="@+id/bt_as_fav"
+        android:layout_alignEnd="@+id/bt_as_fav" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/bt_as_done"
+        android:layout_alignBottom="@+id/bt_as_fav"
+        android:layout_alignLeft="@+id/tv_as_shuffle"
+        android:layout_alignStart="@+id/tv_as_shuffle"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp" />
+
 </RelativeLayout>

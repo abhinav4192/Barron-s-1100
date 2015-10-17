@@ -8,10 +8,6 @@ import android.provider.BaseColumns;
 public class DatabaseContract {
     public static final  int    DATABASE_VERSION    = 1;
     public static final  String DATABASE_NAME       = "database.db";
-//    private static final String PRIMARY_KEY         = "PRIMARY KEY";
-//    private static final String FOREIGN_KEY         = "FOREIGN KEY";
-//    private static final String UNIQUE              = "UNIQUE";
-//    private static final String REFERENCES          = "REFERENCES ";
     private static final String COMMA_SEP           = ", ";
 
     public static final String[] SQL_CREATE_TABLE_ARRAY = {

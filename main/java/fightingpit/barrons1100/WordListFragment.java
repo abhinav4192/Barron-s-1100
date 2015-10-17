@@ -32,11 +32,22 @@ public class WordListFragment extends Fragment {
 
         context = container.getContext();
         View rootView = inflater.inflate(R.layout.word_list_fragment, container, false);
-        Log.d("ABG", "OnCreateView");
 
 
+
+        SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        String aFilerPref = aSharedPref.getString("filter_pref", "");
+        String aFavPref = aSharedPref.getString("fav_pref", "");
+
+        List<GenericContainer> mWordListNotOrdered = new ArrayList<>();
         DatabaseHelper aDBHelper = new DatabaseHelper(getActivity());
-        List<GenericContainer> mWordListNotOrdered = aDBHelper.getWordListByAlphabet("b");
+        if(aFilerPref.equalsIgnoreCase("all") || aFilerPref.equalsIgnoreCase("")){
+            mWordListNotOrdered = aDBHelper.getWordList(aFavPref);
+        } else if(aFilerPref.matches("[A-Z]")){
+            mWordListNotOrdered = aDBHelper.getWordListByAlphabet(aFilerPref,aFavPref);
+        }else if (aFilerPref.matches("[0123456789]{1,2}")){
+            mWordListNotOrdered = aDBHelper.getWordListBySet(String.valueOf(Integer.parseInt(aFilerPref)), aFavPref);
+        }
         if(mWordList != null){
             mWordList.clear();
         }
@@ -45,7 +56,6 @@ public class WordListFragment extends Fragment {
         for(Integer index:aOrderList){
             mWordList.add(mWordListNotOrdered.get(index));
         }
-        Log.d("ABG", "ListSize2:" + String.valueOf(mWordList.size()));
         // Creating the Meaning List
         for(GenericContainer aWordInfo:mWordList){
             mMeaningList.add(aWordInfo.getMeaning());
@@ -60,14 +70,33 @@ public class WordListFragment extends Fragment {
                         (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                         getActivity());
         mExpandableListView.setAdapter(mAdapterExpandableWordList);
+       return rootView;
+    }
 
-
-        return rootView;
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        String aListViewPref = aSharedPref.getString("list_view_pref", "");
+        if(aListViewPref.equalsIgnoreCase("expanded")){
+            for(int i=0;i<mAdapterExpandableWordList.getGroupCount();i++){
+                expandMeaning(i);
+            }
+        }else{
+            for(int i=0;i<mAdapterExpandableWordList.getGroupCount();i++){
+                hideMeaning(i);
+            }
+        }
     }
 
     public static void hideMeaning(int iPosition){
         mExpandableListView.collapseGroup(iPosition);
     }
+
+    public static void expandMeaning(int iPosition){
+        mExpandableListView.expandGroup(iPosition);
+    }
+
 
     public static void updateFavourite(int iPosition, String iWord, boolean iIsFavourite){
         mWordList.get(iPosition).setFavourite(iIsFavourite);
