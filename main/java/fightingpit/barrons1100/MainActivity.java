@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
     private TabsPagerAdapter mAdapter;
+    MenuItem aExpandButton;
 
     // Tab titles
     private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
@@ -103,6 +104,13 @@ public class MainActivity extends FragmentActivity {
         // Tab Navigation Select.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                if(aExpandButton!=null){
+                    if(tab.getPosition()==0){
+                        aExpandButton.setVisible(true);
+                    }else{
+                        aExpandButton.setVisible(false);
+                    }
+                }
                 mViewPager.setCurrentItem(tab.getPosition());
                 // show the given tab
             }
@@ -131,6 +139,13 @@ public class MainActivity extends FragmentActivity {
                 // on changing the page
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
+                if(aExpandButton!=null){
+                    if(position==0){
+                        aExpandButton.setVisible(true);
+                    }else{
+                        aExpandButton.setVisible(false);
+                    }
+                }
             }
 
             @Override
@@ -154,13 +169,13 @@ public class MainActivity extends FragmentActivity {
         getMenuInflater().inflate(R.menu.main, menu);
 
         // Setting Proper Icon for Expand Contract List.
-        MenuItem item = menu.getItem(0);
+        aExpandButton = menu.getItem(0);
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aListViewPref = aSharedPref.getString("list_view_pref", "");
         if (aListViewPref.equalsIgnoreCase("expanded")){
-            item.setIcon(R.drawable.ic_contract_list);
+            aExpandButton.setIcon(R.drawable.ic_contract_list);
         } else if (aListViewPref.equalsIgnoreCase("contracted")){
-            item.setIcon(R.drawable.ic_expand_list);
+            aExpandButton.setIcon(R.drawable.ic_expand_list);
         }
         return true;
     }

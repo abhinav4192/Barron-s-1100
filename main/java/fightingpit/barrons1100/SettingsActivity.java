@@ -25,9 +25,9 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
     private Spinner aFilerSelector;
     private boolean isFirstTime = true;
 
-    private Button mAllButton;
-    private Button mFavButton;
-    private Button mUnmarkedButton;
+    private ImageView mAllButton;
+    private ImageView mFavButton;
+    private ImageView mUnmarkedButton;
     private Button mDone;
 
     private String aSortPref = new String();
@@ -50,9 +50,9 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         mSortAlphabetically = (ImageView) findViewById(R.id.iv_as_aplha);
         mShuffle = (ImageView) findViewById(R.id.iv_as_shuffle);
 
-        // Set Default Image
+        // Set Default Image for Sort
         if(aSortPref.equalsIgnoreCase("alpha")){
-            mSortAlphabetically.setImageResource(R.drawable.ic_alpha_icon_green);
+            mSortAlphabetically.setImageResource(R.drawable.ic_atoz_green);
 
         } else if(aSortPref.equalsIgnoreCase("shuffle")){
             TextView aShuffleTextView = (TextView) findViewById(R.id.tv_as_shuffle);
@@ -64,7 +64,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             @Override
             public void onClick(View v) {
                 aSortPref = "alpha";
-                mSortAlphabetically.setImageResource(R.drawable.ic_alpha_icon_green);
+                mSortAlphabetically.setImageResource(R.drawable.ic_atoz_green);
                 mShuffle.setImageResource(R.drawable.ic_shuffle_icon_grey);
 
             }
@@ -75,7 +75,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             @Override
             public void onClick(View v) {
                 aSortPref = "shuffle";
-                mSortAlphabetically.setImageResource(R.drawable.ic_alpha_icon_grey);
+                mSortAlphabetically.setImageResource(R.drawable.ic_atoz_grey);
                 mShuffle.setImageResource(R.drawable.ic_shuffle_icon_green);
             }
         });
@@ -84,28 +84,44 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         populateFilterSelector();
         aFilerSelector.setOnItemSelectedListener(this);
 
-        mAllButton = (Button) findViewById(R.id.bt_as_all);
+        mAllButton = (ImageView) findViewById(R.id.iv_as_fav_all);
+        mFavButton = (ImageView) findViewById(R.id.iv_as_fav_marked);
+        mUnmarkedButton = (ImageView) findViewById(R.id.iv_as_fav_unmarked);
+
+        // Set Default Image for Favourite Pref
+        if(aFavPref.equalsIgnoreCase("a")){
+            mAllButton.setImageResource(R.drawable.ic_circle_outline_green);
+        }else if(aFavPref.equalsIgnoreCase("m")){
+            mFavButton.setImageResource(R.drawable.ic_star_solid_green);
+        }else{
+            mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_green);
+        }
         mAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 aFavPref = "a";
+                mAllButton.setImageResource(R.drawable.ic_circle_outline_green);
+                mFavButton.setImageResource(R.drawable.ic_star_solid_grey);
+                mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_grey);
             }
         });
-
-
-        mFavButton = (Button) findViewById(R.id.bt_as_fav);
         mFavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 aFavPref = "m";
+                mAllButton.setImageResource(R.drawable.ic_circle_outline_grey);
+                mFavButton.setImageResource(R.drawable.ic_star_solid_green);
+                mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_grey);
             }
         });
 
-        mUnmarkedButton = (Button) findViewById(R.id.bt_as_unmarked);
         mUnmarkedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 aFavPref = "u";
+                mAllButton.setImageResource(R.drawable.ic_circle_outline_grey);
+                mFavButton.setImageResource(R.drawable.ic_star_solid_grey);
+                mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_green);
             }
         });
 
