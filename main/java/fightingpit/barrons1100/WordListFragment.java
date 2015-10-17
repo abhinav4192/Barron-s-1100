@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WordListFragment extends Fragment {
@@ -109,19 +111,64 @@ public class WordListFragment extends Fragment {
     {
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aIndexValue = aSharedPref.getString("IndexValue", "");
+        String aSortPref = aSharedPref.getString("sort_pref", "");
+        String aFavPref = aSharedPref.getString("fav_pref", "");
+        String aFilterPref = aSharedPref.getString("filter_pref", "");
+        Integer aWordCount = aSharedPref.getInt("word_list_count", 0);
+        String aWasShuffeled = aSharedPref.getString("was_list_shuffled", "");
 
+        DatabaseHelper aDBHelper = new DatabaseHelper(context);
         List<Integer> aIndexList = new ArrayList<>();
-        if(aIndexValue != "")
-        {
-            String[] aIndexStringArray;
-            aIndexStringArray = aIndexValue.split(" ");
-            int i=0;
-            while(i < aIndexStringArray.length ) {
-                aIndexList.add(Integer.parseInt(aIndexStringArray[i]));
-                i++;
+        if(aFilterPref.equalsIgnoreCase("All")){
+            Integer maxIndex= aDBHelper.getWordListCount(aFavPref);
+            for(int i=0;i< maxIndex ;i++)
+            {
+                aIndexList.add(i);
             }
         }
-        return aIndexList;
+        else if(aFilterPref.matches("[A-Z]")){
+            Integer maxIndex= aDBHelper.getCountByAlphabet(aFilterPref, aFavPref);
+            for(int i=0;i<maxIndex;i++)
+            {
+                aIndexList.add(i);
+            }
+        }else if (aFilterPref.matches("[0123456789]{1,2}")){
+            Integer maxIndex= aDBHelper.getCountBySetNumber(aFilterPref, aFavPref);
+            for(int i=0;i<maxIndex;i++)
+            {
+                aIndexList.add(i);
+            }
+        }
+        if(aIndexList.size() >0 && aIndexList.size() == aWordCount && aWasShuffeled.equalsIgnoreCase(aSortPref)){
+            aIndexList.clear();
+            if(aIndexValue != "")
+            {
+                String[] aIndexStringArray;
+                aIndexStringArray = aIndexValue.split(" ");
+                int i=0;
+                while(i < aIndexStringArray.length ) {
+                    aIndexList.add(Integer.parseInt(aIndexStringArray[i]));
+                    i++;
+                }
+            }
+        }else{
+            SharedPreferences.Editor aEditor = aSharedPref.edit();
+            if(aSortPref.equals("shuffle")){
+                Collections.shuffle(aIndexList);
+               aEditor.putString("was_list_shuffled","shuffle");
+            }else{
+               aEditor.putString("was_list_shuffled","alpha");
+            }
 
+            String aOrder = new String();
+            for(int i=0;i<aIndexList.size();i++)
+            {
+                aOrder= aOrder + (aIndexList.get(i)).toString() + " ";
+            }
+            aEditor.putString("IndexValue", aOrder);
+            aEditor.putInt("word_list_count",aIndexList.size());
+            aEditor.apply();
+        }
+        return aIndexList;
     }
 }

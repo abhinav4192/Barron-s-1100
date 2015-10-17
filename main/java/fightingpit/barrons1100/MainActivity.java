@@ -10,14 +10,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -34,26 +32,6 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-        String aIndexValue = aSharedPref.getString("IndexValue", "");
-        if (aIndexValue.equalsIgnoreCase("")){
-            List<Integer> aIndexList = new ArrayList<>();
-            for(int i=0;i<880;i++)
-            {
-                aIndexList.add(i);
-            }
-
-            SharedPreferences.Editor aEditor = aSharedPref.edit();
-            String aOrder = new String();
-            for(int i=0;i<aIndexList.size();i++)
-            {
-                aOrder= aOrder + (aIndexList.get(i)).toString() + " ";
-            }
-            aEditor.putString("IndexValue", aOrder);
-            aEditor.apply();
-            finish();
-        }
-
-
         SharedPreferences.Editor aEditor = aSharedPref.edit();
 
         // If App is running for first time, set list Preference
@@ -63,7 +41,7 @@ public class MainActivity extends FragmentActivity {
             aEditor.commit();
         }
 
-        // If App is running for first time, set list Preference
+        // If App is running for first time, set fav Preference
         String aFavPref = aSharedPref.getString("fav_pref", "");
         if(aFavPref.equalsIgnoreCase("")){
             aEditor.putString("fav_pref", "a");
@@ -78,17 +56,12 @@ public class MainActivity extends FragmentActivity {
         }
 
 
+        // If App is running for first time, set Sort Preference
         String aSortPref = aSharedPref.getString("sort_pref", "");
-
-        if(aFilerPref.equalsIgnoreCase("")){
+        if(aSortPref.equalsIgnoreCase("")){
             aEditor.putString("sort_pref", "alpha");
             aEditor.commit();
         }
-
-
-
-
-
 
         final ActionBar actionBar = getActionBar();
 

@@ -4,25 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SettingsActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
     private ImageView mSortAlphabetically;
     private ImageView mShuffle;
-    private Spinner aFilerSelector;
+    private Spinner mFilerSelector;
     private boolean isFirstTime = true;
 
     private ImageView mAllButton;
@@ -33,9 +30,6 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
     private String aSortPref = new String();
     private String aFavPref = new String();
     private String aFilterPref = new String();
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +44,11 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         mSortAlphabetically = (ImageView) findViewById(R.id.iv_as_aplha);
         mShuffle = (ImageView) findViewById(R.id.iv_as_shuffle);
 
-        // Set Default Image for Sort
+        // Set Proper Image for Sort
         if(aSortPref.equalsIgnoreCase("alpha")){
             mSortAlphabetically.setImageResource(R.drawable.ic_atoz_green);
 
         } else if(aSortPref.equalsIgnoreCase("shuffle")){
-            TextView aShuffleTextView = (TextView) findViewById(R.id.tv_as_shuffle);
-            aShuffleTextView.setText("Shuffle Again");
             mShuffle.setImageResource(R.drawable.ic_shuffle_icon_green);
         }
 
@@ -80,15 +72,15 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             }
         });
 
-        aFilerSelector = (Spinner) findViewById(R.id.sp_as_filter_selector);
+        mFilerSelector = (Spinner) findViewById(R.id.sp_as_filter_selector);
         populateFilterSelector();
-        aFilerSelector.setOnItemSelectedListener(this);
+        mFilerSelector.setOnItemSelectedListener(this);
 
         mAllButton = (ImageView) findViewById(R.id.iv_as_fav_all);
         mFavButton = (ImageView) findViewById(R.id.iv_as_fav_marked);
         mUnmarkedButton = (ImageView) findViewById(R.id.iv_as_fav_unmarked);
 
-        // Set Default Image for Favourite Pref
+        // Set Proper Image for Favourite Pref
         if(aFavPref.equalsIgnoreCase("a")){
             mAllButton.setImageResource(R.drawable.ic_circle_outline_green);
         }else if(aFavPref.equalsIgnoreCase("m")){
@@ -129,65 +121,20 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         mDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reCalculateOrderList();
+                SharedPreferences inSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor aEditor = inSharedPref.edit();
+                aEditor.putString("sort_pref",aSortPref);
+                aEditor.putString("fav_pref",aFavPref);
+                aEditor.putString("filter_pref",aFilterPref);
+                aEditor.apply();
+                finish();
             }
         });
     }
 
-    public void reCalculateOrderList(){
-
-        DatabaseHelper aDBHelper = new DatabaseHelper(this);
-        List<Integer> aIndexList = new ArrayList<>();
-        if(aFilterPref.equalsIgnoreCase("All")){
-            Integer maxIndex= aDBHelper.getWordListCount(aFavPref);
-            for(int i=0;i< maxIndex ;i++)
-            {
-                aIndexList.add(i);
-            }
-
-        }
-        else if(aFilterPref.matches("[A-Z]")){
-            Integer maxIndex= aDBHelper.getCountByAlphabet(aFilterPref, aFavPref);
-            for(int i=0;i<maxIndex;i++)
-            {
-                aIndexList.add(i);
-            }
-        }else if (aFilterPref.matches("[0123456789]{1,2}")){
-            Integer maxIndex= aDBHelper.getCountBySetNumber(aFilterPref, aFavPref);
-            for(int i=0;i<maxIndex;i++)
-            {
-                aIndexList.add(i);
-            }
-        }
-
-
-        if(aIndexList.size() > 0 ){
-            SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-            SharedPreferences.Editor aEditor = aSharedPref.edit();
-            if(aSortPref.equals("shuffle")){
-                Collections.shuffle(aIndexList);
-            }
-
-            String aOrder = new String();
-            for(int i=0;i<aIndexList.size();i++)
-            {
-                aOrder= aOrder + (aIndexList.get(i)).toString() + " ";
-            }
-            aEditor.putString("IndexValue", aOrder);
-            aEditor.putString("sort_pref",aSortPref);
-            aEditor.putString("fav_pref",aFavPref);
-            aEditor.putString("filter_pref",aFilterPref);
-            aEditor.apply();
-            finish();
-        }else
-        {
-            Toast.makeText(this,"No word match the provided criteria", Toast.LENGTH_LONG).show();
-        }
-    }
-
+    // Method to set Shared Preferences for Select Word Criteria.
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-
         if(isFirstTime){
             isFirstTime = false;
         }else {
@@ -202,13 +149,11 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
                 aFilterPref = String.valueOf(Integer.parseInt(parent.getItemAtPosition(pos).toString().substring(4)));
             }
         }
-
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
-
 
     private void populateFilterSelector(){
         List<String> aSelectionList = new ArrayList<>();
@@ -262,17 +207,17 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         ArrayAdapter<String> mFilterAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, aSelectionList);
         mFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        aFilerSelector.setAdapter(mFilterAdapter);
+        mFilerSelector.setAdapter(mFilterAdapter);
 
         // Set Selected Position, based on current Filer Preference
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aFilerPref = aSharedPref.getString("filter_pref", "");
         if(aFilerPref.equals("All")){
-            aFilerSelector.setSelection(0);
+            mFilerSelector.setSelection(0);
         }else if(aFilerPref.matches("[A-Z]")){
             for(int i=0;i< aSelectionList.size();i++){
                 if(aSelectionList.get(i).equals("Alphabet " + aFilerPref)){
-                    aFilerSelector.setSelection(i);
+                    mFilerSelector.setSelection(i);
                     break;
                 }
             }
@@ -282,7 +227,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             }
             for(int i=0;i< aSelectionList.size();i++){
                 if(aSelectionList.get(i).equals("Set " + aFilerPref)){
-                    aFilerSelector.setSelection(i);
+                    mFilerSelector.setSelection(i);
                     break;
                 }
             }
