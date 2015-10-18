@@ -1,13 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
-    <TextView android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Design Top Rated Screen 2"
-        android:textSize="20dp"
-        android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/tv_fcf_word_selection"
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:paddingLeft="8dp"
+        android:text="Learning Set 09"
+        android:layout_height="wrap_content"
+        android:background="#616161"
+        android:textColor="#FFF"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_weight="7"
+        android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_fcf_set_progress"
+        android:layout_below="@+id/tv_fcf_word_selection"
+        android:layout_alignLeft="@+id/tv_fcf_word_selection"
+        android:layout_alignStart="@+id/tv_fcf_word_selection"
+        android:layout_alignRight="@+id/tv_fcf_word_selection"
+        android:layout_alignEnd="@+id/tv_fcf_word_selection"
+        android:progress="67"/>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl_fcf_cardView_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pb_fcf_set_progress"
+        android:layout_margin="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/fl_fcf_cardView_holder"
+        android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
+        android:layout_alignStart="@+id/fl_fcf_cardView_holder"
+        android:layout_alignRight="@+id/fl_fcf_cardView_holder"
+        android:layout_alignEnd="@+id/fl_fcf_cardView_holder" >
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:text="Wrong"
+            android:id="@+id/bt_fcf_wrong"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:text="Correct"
+            android:id="@+id/bt_fcf_correct"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Word"
+        android:id="@+id/bt_fcf_next_word"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/fl_fcf_cardView_holder"
+        android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
+        android:layout_alignStart="@+id/fl_fcf_cardView_holder"
+        android:layout_alignRight="@+id/fl_fcf_cardView_holder"
+        android:layout_alignEnd="@+id/fl_fcf_cardView_holder" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Meaning"
+        android:id="@+id/bt_fcf_show_meaning"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/fl_fcf_cardView_holder"
+        android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
+        android:layout_alignStart="@+id/fl_fcf_cardView_holder"
+        android:layout_alignRight="@+id/fl_fcf_cardView_holder"
+        android:layout_alignEnd="@+id/fl_fcf_cardView_holder" />
+
+</RelativeLayout>

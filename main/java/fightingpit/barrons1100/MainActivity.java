@@ -10,14 +10,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.List;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements FlashCardFrontFragment.OnFragmentInteractionListener,
+        FlashCardBackFragment.OnFragmentInteractionListener{
 
     private ViewPager mViewPager;
     private TabsPagerAdapter mAdapter;
@@ -66,7 +69,7 @@ public class MainActivity extends FragmentActivity {
         final ActionBar actionBar = getActionBar();
 
         // Initilization
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TabsPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
         mViewPager.setAdapter(mAdapter);
 
@@ -187,6 +190,13 @@ public class MainActivity extends FragmentActivity {
         if (requestCode == 100) {
             // Settings Activity finished.
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onFragmentInteraction(){
+        Fragment aFlashCardFragment = getFragmentManager().findFragmentByTag("android:switcher:" + mViewPager.getId()+"1");
+        if(aFlashCardFragment!=null){
+            ((FlashCardsFragment) aFlashCardFragment).testMEthod();
         }
     }
 
