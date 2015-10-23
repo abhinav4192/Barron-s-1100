@@ -1,8 +1,6 @@
 package fightingpit.barrons1100;
 
 import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -10,17 +8,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.CardView;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import java.util.List;
-
-
-public class MainActivity extends FragmentActivity implements FlashCardFrontFragment.OnFragmentInteractionListener,
-        FlashCardBackFragment.OnFragmentInteractionListener{
+public class MainActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
     private TabsPagerAdapter mAdapter;
@@ -96,6 +95,7 @@ public class MainActivity extends FragmentActivity implements FlashCardFrontFrag
             }
 
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                mAdapter.notifyDataSetChanged();
                 // probably ignore this event
             }
         };
@@ -114,6 +114,7 @@ public class MainActivity extends FragmentActivity implements FlashCardFrontFrag
             public void onPageSelected(int position) {
                 // on changing the page
                 // make respected tab selected
+                mAdapter.notifyDataSetChanged();
                 actionBar.setSelectedNavigationItem(position);
                 if(aExpandButton!=null){
                     if(position==0){
@@ -122,7 +123,10 @@ public class MainActivity extends FragmentActivity implements FlashCardFrontFrag
                         aExpandButton.setVisible(false);
                     }
                 }
+
             }
+
+
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
@@ -133,10 +137,25 @@ public class MainActivity extends FragmentActivity implements FlashCardFrontFrag
             }
         });
 
-        // Loading the Advertisement.
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if(false){
+            // If user has purchased the app.
+            // Hide advertisement.
+            mAdView.setVisibility(View.GONE);
+            // Make Layout Full Screen
+            int sizeInDP = 8;
+            int marginInDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
+                            .getDisplayMetrics());
+            RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+                    CardView.LayoutParams.MATCH_PARENT);
+            aCVParams.setMargins(0, 0, 0, marginInDp);
+            mViewPager.setLayoutParams(aCVParams);
+        }else{
+            // Loading the Advertisement.
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
     }
 
     @Override
@@ -193,11 +212,8 @@ public class MainActivity extends FragmentActivity implements FlashCardFrontFrag
         }
     }
 
-    public void onFragmentInteraction(){
-        Fragment aFlashCardFragment = getFragmentManager().findFragmentByTag("android:switcher:" + mViewPager.getId()+"1");
-        if(aFlashCardFragment!=null){
-            ((FlashCardsFragment) aFlashCardFragment).testMEthod();
-        }
-    }
+//    public void onFragmentInteraction(){
+//        Fragment aFlashCardFragment = getFragmentManager().findFragmentByTag("android:switcher:" + mViewPager.getId()+"1");
+//    }
 
 }

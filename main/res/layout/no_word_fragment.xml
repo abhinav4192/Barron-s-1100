@@ -4,28 +4,29 @@
     android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_front_cardView"
+        android:id="@+id/cv_nwf_cardView"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         card_view:cardCornerRadius="4dp"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:layout_marginTop="24dp"
         android:background="#B2DFDB"
-        android:layout_margin="8dp"
-        android:backgroundTint="#D32F2F"
-        >
+        android:layout_margin="8dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:id="@+id/tv_front_word"
-        android:textSize="36sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="No word match the selected criteria."
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:id="@+id/tv_nwf_word"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

@@ -8,13 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
-
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +33,8 @@ public class WordListFragment extends Fragment {
         context = container.getContext();
         View rootView = inflater.inflate(R.layout.word_list_fragment, container, false);
 
-
+        TextView mNoWord = (TextView) rootView.findViewById(R.id.tv_wlf_no_word);
+        mNoWord.setVisibility(View.GONE);
 
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aFilerPref = aSharedPref.getString("filter_pref", "");
@@ -54,6 +53,10 @@ public class WordListFragment extends Fragment {
             mWordList.clear();
         }
 
+        if(mMeaningList != null){
+            mMeaningList.clear();
+        }
+
         List<Integer> aOrderList= getIndex();
         for(Integer index:aOrderList){
             mWordList.add(mWordListNotOrdered.get(index));
@@ -62,8 +65,6 @@ public class WordListFragment extends Fragment {
         for(GenericContainer aWordInfo:mWordList){
             mMeaningList.add(aWordInfo.getMeaning());
         }
-
-
         // Putting data in List View.
         mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
         mAdapterExpandableWordList = new AdapterExpandableWordList(context,mWordList, mMeaningList);
@@ -72,6 +73,10 @@ public class WordListFragment extends Fragment {
                         (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                         getActivity());
         mExpandableListView.setAdapter(mAdapterExpandableWordList);
+
+        if(mWordList.size()==0){
+            mNoWord.setVisibility(View.VISIBLE);
+        }
        return rootView;
     }
 

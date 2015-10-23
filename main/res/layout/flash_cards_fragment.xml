@@ -3,7 +3,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="0dp">
 
     <TextView
         android:id="@+id/tv_fcf_word_selection"
@@ -30,7 +33,9 @@
         android:layout_alignStart="@+id/tv_fcf_word_selection"
         android:layout_alignRight="@+id/tv_fcf_word_selection"
         android:layout_alignEnd="@+id/tv_fcf_word_selection"
-        android:progress="67"/>
+        android:progress="67"
+        android:progressTint="#00796B"
+        android:progressBackgroundTint="#009688"/>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fl_fcf_cardView_holder"
@@ -38,53 +43,47 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pb_fcf_set_progress"
         android:layout_margin="8dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp"
+    <Button
+        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="35dp"
+        android:text="I knew the meaning"
+        android:background="#00796B"
+        android:textColor="#FFF"
+        android:id="@+id/bt_fcf_correct"
         android:layout_below="@+id/fl_fcf_cardView_holder"
         android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
         android:layout_alignStart="@+id/fl_fcf_cardView_holder"
         android:layout_alignRight="@+id/fl_fcf_cardView_holder"
-        android:layout_alignEnd="@+id/fl_fcf_cardView_holder" >
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="wrap_content"
-            android:text="Wrong"
-            android:id="@+id/bt_fcf_wrong"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="wrap_content"
-            android:text="Correct"
-            android:id="@+id/bt_fcf_correct"/>
-    </LinearLayout>
+        android:layout_alignEnd="@+id/fl_fcf_cardView_holder"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next Word"
-        android:id="@+id/bt_fcf_next_word"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/fl_fcf_cardView_holder"
+        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="35dp"
+        android:background="#D32F2F"
+        android:textColor="#FFF"
+        android:padding="0dp"
+        android:text="I didn't know the meaning."
+        android:id="@+id/bt_fcf_wrong"
+        android:layout_below="@+id/bt_fcf_correct"
         android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
         android:layout_alignStart="@+id/fl_fcf_cardView_holder"
         android:layout_alignRight="@+id/fl_fcf_cardView_holder"
-        android:layout_alignEnd="@+id/fl_fcf_cardView_holder" />
+        android:layout_alignEnd="@+id/fl_fcf_cardView_holder"/>
+
+
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:text="Show Meaning"
         android:id="@+id/bt_fcf_show_meaning"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="26dp"
+        android:background="#00796B"
+        android:textColor="#FFF"
         android:layout_below="@+id/fl_fcf_cardView_holder"
         android:layout_alignLeft="@+id/fl_fcf_cardView_holder"
         android:layout_alignStart="@+id/fl_fcf_cardView_holder"

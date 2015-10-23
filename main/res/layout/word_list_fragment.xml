@@ -11,5 +11,12 @@
     android:divider="#B2DFDB"
     android:groupIndicator="@null">
     </ExpandableListView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:padding="8dp"
+        android:text="No word match the selected criteria. Change criteria."
+        android:id="@+id/tv_wlf_no_word" />
 
 </LinearLayout>

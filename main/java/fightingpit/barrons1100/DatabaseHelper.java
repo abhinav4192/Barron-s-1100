@@ -302,6 +302,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return aReturnValue;
     }
+
+
+    public boolean isFavourite(String iWord){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {DatabaseContract.WordListDB.FAVOURITE};
+        String selection = DatabaseContract.WordListDB.WORD + "=?";
+        String[] selectionArgs = {iWord};
+
+        Cursor c = db.query(
+                DatabaseContract.WordListDB.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        boolean aReturnValue = false;
+        if(c.getCount()>0){
+            c.moveToFirst();
+            if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
+                aReturnValue = true;
+            }
+        }
+        return aReturnValue;
+    }
+
+
     public void updateProgress(String iWord, Integer iProgress){
 
         SQLiteDatabase db = getReadableDatabase();

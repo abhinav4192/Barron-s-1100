@@ -1,5 +1,6 @@
 package fightingpit.barrons1100;
 
+
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class FlashCardFrontFragment extends Fragment {
+public class BlankFragment extends Fragment {
 
-    public static FlashCardFrontFragment newInstance() {
-        FlashCardFrontFragment fragment = new FlashCardFrontFragment();
+    // TODO: Rename and change types and number of parameters
+    public static BlankFragment newInstance() {
+        BlankFragment fragment = new BlankFragment();
         return fragment;
     }
 
-    public FlashCardFrontFragment() {
+    public BlankFragment() {
         // Required empty public constructor
     }
 
@@ -26,13 +28,13 @@ public class FlashCardFrontFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.flash_card_front, container, false);
-
-        TextView aTv = (TextView) rootView.findViewById(R.id.tv_front_word);
+        View rootView = inflater.inflate(R.layout.no_word_fragment, container, false);
+        TextView aTv = (TextView) rootView.findViewById(R.id.tv_nwf_word);
         Bundle bundle = getArguments();
-        String aWord = bundle.getString("Word");
+        String aWord = bundle.getString("Text");
         aTv.setText(aWord);
         return rootView;
     }
+
 
 }

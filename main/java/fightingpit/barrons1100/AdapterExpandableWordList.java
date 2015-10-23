@@ -116,7 +116,6 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
 
         // Set Word Value
         holder.WordView.setText(WordList.get(wordPosition).getWord());
-        //holder.MeaningView.setText(ListData.get(position).getMeaningVal());
 
         // Set appropriate Favourite Image
         if(WordList.get(wordPosition).isFavourite()){

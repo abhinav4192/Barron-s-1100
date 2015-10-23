@@ -7,8 +7,6 @@ package fightingpit.barrons1100;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.ViewGroup;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
@@ -29,11 +27,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
-
-//    @Override
-//    public Object instantiateItem(ViewGroup container, int position) {
-//        return super.instantiateItem(container, position);
-//    }
 
     @Override
     public int getCount() {
