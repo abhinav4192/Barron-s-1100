@@ -7,8 +7,10 @@ package fightingpit.barrons1100;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.util.Log;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
+    private String mTabName = new String();
 
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -34,11 +36,27 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
+//    @Override
+//    public int getItemPosition(Object object)
+//    {
+//        position;
+//        return POSITION_NONE;
+//    }
+
+
     @Override
-    public int getItemPosition(Object object)
-    {
-        return POSITION_NONE;
+    public int getItemPosition(Object object) {
+
+        Log.d("ABG", object.getClass().getSimpleName());
+        if(object.getClass().getSimpleName().equals(mTabName)){
+            return POSITION_UNCHANGED;
+        }
+        else {
+            return POSITION_NONE;
+        }
     }
 
-
+    public void setTabName(String iTabName){
+        mTabName = iTabName;
+    }
 }

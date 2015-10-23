@@ -10,5 +10,9 @@
     android:icon="@drawable/ic_expand_list"
     android:showAsAction="always"
     android:orderInCategory="1" />
+<item android:id="@+id/action_reset"
+        android:title="Reset"
+        android:showAsAction="always"
+        android:orderInCategory="2" />
 
-    </menu>
+</menu>

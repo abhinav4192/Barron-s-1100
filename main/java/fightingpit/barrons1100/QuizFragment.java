@@ -16,8 +16,11 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.quiz_fragment, container, false);
-
+        View rootView = inflater.inflate(R.layout.quiz_main_fragment, container, false);
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fl_qmf_fragment_holder, new PurchasedQuizFragment())
+                .commit();
         return rootView;
     }
 }

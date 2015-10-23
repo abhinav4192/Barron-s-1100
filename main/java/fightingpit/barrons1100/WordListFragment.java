@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,8 @@ public class WordListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.word_list_fragment, container, false);
 
         TextView mNoWord = (TextView) rootView.findViewById(R.id.tv_wlf_no_word);
-        mNoWord.setVisibility(View.GONE);
+        CardView mCardView = (CardView) rootView.findViewById(R.id.cv_wlf_cardView);
+        mCardView.setVisibility(View.GONE);
 
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aFilerPref = aSharedPref.getString("filter_pref", "");
@@ -49,6 +51,7 @@ public class WordListFragment extends Fragment {
         }else if (aFilerPref.matches("[0123456789]{1,2}")){
             mWordListNotOrdered = aDBHelper.getWordListBySet(String.valueOf(Integer.parseInt(aFilerPref)), aFavPref);
         }
+        aDBHelper.close();
         if(mWordList != null){
             mWordList.clear();
         }
@@ -75,7 +78,7 @@ public class WordListFragment extends Fragment {
         mExpandableListView.setAdapter(mAdapterExpandableWordList);
 
         if(mWordList.size()==0){
-            mNoWord.setVisibility(View.VISIBLE);
+            mCardView.setVisibility(View.VISIBLE);
         }
        return rootView;
     }
@@ -110,6 +113,8 @@ public class WordListFragment extends Fragment {
         mAdapterExpandableWordList.notifyDataSetChanged();
         DatabaseHelper aDBHelper = new DatabaseHelper(context);
         aDBHelper.updateFavourite(iWord, iIsFavourite);
+        aDBHelper.close();
+        ((MainActivity) context).updateTabs("WordListFragment");
     }
 
     private List<Integer> getIndex()
@@ -144,6 +149,7 @@ public class WordListFragment extends Fragment {
                 aIndexList.add(i);
             }
         }
+        aDBHelper.close();
         if(aIndexList.size() >0 && aIndexList.size() == aWordCount && aWasShuffeled.equalsIgnoreCase(aSortPref)){
             aIndexList.clear();
             if(aIndexValue != "")

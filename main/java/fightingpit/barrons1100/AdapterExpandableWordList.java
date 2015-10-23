@@ -137,6 +137,7 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
                 }else{
                     WordListFragment.updateFavourite(aPostion,WordList.get(aPostion).getWord(),true);
                 }
+
             }
         });
 

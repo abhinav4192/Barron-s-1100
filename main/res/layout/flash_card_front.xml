@@ -9,13 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         card_view:cardCornerRadius="4dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="24dp"
         android:background="#B2DFDB"
-        android:layout_margin="8dp"
-        android:backgroundTint="#D32F2F"
-        >
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
 
     <TextView
         android:layout_width="match_parent"

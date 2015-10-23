@@ -90,6 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             returnValue = c.getCount();
             c.close();
         }
+        db.close();
         return returnValue;
     }
 
@@ -116,6 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             returnValue = c.getCount();
             c.close();
         }
+        db.close();
         return returnValue;
     }
 
@@ -140,6 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             returnValue = c.getCount();
             c.close();
         }
+        db.close();
         return returnValue;
     }
 
@@ -147,7 +150,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         //String[] projection = {DatabaseContract.WordListDB.FOOD_ITEM_NAME};
         Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, null, null, null, null, null);
-
         List<GenericContainer> aReturnList = new ArrayList<>();
         c.moveToFirst();
         while(!c.isAfterLast()){
@@ -184,6 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         c.close();
+        db.close();
         return aReturnList;
     }
 
@@ -230,6 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         c.close();
+        db.close();
         return aReturnList;
     }
 
@@ -275,6 +279,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         c.close();
+        db.close();
         return aReturnList;
     }
 
@@ -300,6 +305,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToFirst();
             aReturnValue = c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS));
         }
+        c.close();
+        db.close();
         return aReturnValue;
     }
 
@@ -328,6 +335,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aReturnValue = true;
             }
         }
+        c.close();
+        db.close();
         return aReturnValue;
     }
 
@@ -340,6 +349,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = DatabaseContract.WordListDB.WORD + "=?";
         String[] selectionArgs = { iWord };
         db.update(DatabaseContract.WordListDB.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
     }
 
     public void updateFavourite(String iWord, boolean iIsFav){
@@ -354,6 +364,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = DatabaseContract.WordListDB.WORD + "=?";
         String[] selectionArgs = { iWord };
         db.update(DatabaseContract.WordListDB.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
     }
 
 }

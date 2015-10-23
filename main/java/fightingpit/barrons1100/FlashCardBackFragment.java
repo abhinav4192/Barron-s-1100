@@ -64,8 +64,10 @@ public class FlashCardBackFragment extends Fragment {
                     mFav.setImageResource(R.drawable.ic_star_black_24dp);
                     aDBHelper.updateFavourite(aWord,true);
                 }
+                ((MainActivity) getActivity()).updateTabs("FlashCardsFragment");
             }
         });
+        aDBHelper.close();
         return rootView;
     }
 }
