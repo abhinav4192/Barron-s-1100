@@ -2,6 +2,7 @@ package fightingpit.barrons1100;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,12 +20,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fightingpit.barrons1100.util.IabHelper;
+import fightingpit.barrons1100.util.IabResult;
+import fightingpit.barrons1100.util.Inventory;
+import fightingpit.barrons1100.util.Purchase;
 
 public class MainActivity extends FragmentActivity {
 
@@ -34,6 +41,10 @@ public class MainActivity extends FragmentActivity {
     MenuItem mResetButton;
     private final Integer mMaxProgress = 3;
     public Context context;
+    private AdView mAdView;
+
+    // Billing Helper
+    IabHelper mHelper;
 
     // Tab titles
     private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
@@ -42,6 +53,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAdView = (AdView) findViewById(R.id.adView);
 
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor aEditor = aSharedPref.edit();
@@ -162,28 +175,111 @@ public class MainActivity extends FragmentActivity {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
-
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        if(true){
-            // If user has purchased the app.
-            // Hide advertisement.
-            mAdView.setVisibility(View.GONE);
-            // Make Layout Full Screen
-            int sizeInDP = 8;
-            int marginInDp = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
-                            .getDisplayMetrics());
-            RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
-                    CardView.LayoutParams.MATCH_PARENT);
-            aCVParams.setMargins(0, 0, 0, marginInDp);
-            mViewPager.setLayoutParams(aCVParams);
-        }else{
-            // Loading the Advertisement.
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
         context = getBaseContext();
+
+        String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
+        if(aIsAppPurchased.equals("")){
+            // App is running for first time, check if app has been purchased or not.
+            try {
+                // Setup Billing Helper
+                mHelper = new IabHelper(this, getResources().getString(R.string.base64EncodedPublicKey));
+                mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                    public void onIabSetupFinished(IabResult result) {
+                        if (!result.isSuccess()) {
+                            Log.d("ABG", "Problem setting up In-app Billing: " + result);
+                            Toast.makeText(getBaseContext(),
+                                    "Cannot fetch premium status.Connect to Internet and start Application again",
+                                    Toast.LENGTH_LONG).show();
+
+                            // Error. Show advertisements.
+                            AdRequest adRequest = new AdRequest.Builder().build();
+                            mAdView.loadAd(adRequest);
+                        } else {
+                            Log.d("ABG", "Helper Setup Complete");
+                            mHelper.queryInventoryAsync(mGotInventoryListener);
+                        }
+                    }
+                });
+            }catch (Exception e){
+                Log.d("ABG", "Exception caught while Setting up Helper:" + e);
+                Toast.makeText(getBaseContext(),
+                        "Cannot fetch premium status.Connect to Internet and start Application again",
+                        Toast.LENGTH_LONG).show();
+
+                // Exception Caught. Show ads.
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
+
+            }
+        }else{
+            // Purchase Status already known.
+            if("y".equals(aIsAppPurchased)){
+                // If user has purchased the app.
+                // Hide advertisement.
+                mAdView.setVisibility(View.GONE);
+                // Make Layout Full Screen
+                int sizeInDP = 8;
+                int marginInDp = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
+                                .getDisplayMetrics());
+                RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+                        CardView.LayoutParams.MATCH_PARENT);
+                aCVParams.setMargins(0, 0, 0, marginInDp);
+                mViewPager.setLayoutParams(aCVParams);
+            }else{
+                // Loading the Advertisement.
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
+            }
+        }
     }
+
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+            = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result,
+                                             Inventory inventory) {
+
+            if (result.isFailure()) {
+                Log.d("ABG", "Purchase Query Failure:" + result);
+                    // Loading the Advertisement.
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    mAdView.loadAd(adRequest);
+            }
+            else {
+                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor aEditor = aSharedPref.edit();
+                String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
+
+                // does the user have the premium upgrade?
+                boolean mIsPremium = inventory.hasPurchase("premium");
+                if(mIsPremium){
+                    Log.d("ABG", "Is Purchased");
+                    aEditor.putString("is_app_purchased", "y");
+                    aEditor.commit();
+                    // User has purchased the app.
+                    // Hide advertisement.
+                    mAdView.setVisibility(View.GONE);
+                    // Make Layout Full Screen
+                    int sizeInDP = 8;
+                    int marginInDp = (int) TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
+                                    .getDisplayMetrics());
+                    RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+                            CardView.LayoutParams.MATCH_PARENT);
+                    aCVParams.setMargins(0, 0, 0, marginInDp);
+                    mViewPager.setLayoutParams(aCVParams);
+                }else{
+                    Log.d("ABG", "Not Purchased");
+                    aEditor.putString("is_app_purchased", "n");
+                    aEditor.commit();
+
+                    // Loading the Advertisement.
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    mAdView.loadAd(adRequest);
+                }
+            }
+        }
+    };
 
 
     @Override
@@ -198,7 +294,7 @@ public class MainActivity extends FragmentActivity {
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aListViewPref = aSharedPref.getString("list_view_pref", "");
         if (aListViewPref.equalsIgnoreCase("expanded")){
-            aExpandButton.setIcon(R.drawable.ic_contract_list);
+            aExpandButton.setIcon(R.drawable.ic_contract_white);
         } else if (aListViewPref.equalsIgnoreCase("contracted")){
             aExpandButton.setIcon(R.drawable.ic_expand_list);
         }
@@ -223,7 +319,7 @@ public class MainActivity extends FragmentActivity {
                 item.setIcon(R.drawable.ic_expand_list);
                 aEditor.putString("list_view_pref", "contracted");
             } else if (aListViewPref.equalsIgnoreCase("contracted")){
-                item.setIcon(R.drawable.ic_contract_list);
+                item.setIcon(R.drawable.ic_contract_white);
                 aEditor.putString("list_view_pref", "expanded");
             }
             aEditor.commit();
@@ -267,14 +363,55 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        Log.d("ABG","OnActivityResultCalled. RequestCode:" + String.valueOf(requestCode) + " : resultCode:" + String.valueOf(resultCode));
         // Check which request we're responding to
         if (requestCode == 100) {
             // Settings Activity finished.
             mAdapter.setTabName("");
             mAdapter.notifyDataSetChanged();
         }
+        if(requestCode==10001){
+            Fragment fragment = getFragmentManager().findFragmentByTag("BuyFragment");
+            ((BuyAppFragment) fragment).onActivityResult(requestCode,resultCode,data);
+        }
     }
+
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase)
+        {
+            if (result.isFailure()) {
+                Log.d("ABG", "Error purchasing: " + result);
+                Toast.makeText(getBaseContext(), "Exception", Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if (purchase.getSku().equalsIgnoreCase("premium")) {
+                Log.d("ABG", "Purchase Done 1");
+                Toast.makeText(getBaseContext(), "Purchase Done", Toast.LENGTH_LONG).show();
+                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor aEditor = aSharedPref.edit();
+                aEditor.putString("is_app_purchased", "y");
+                aEditor.commit();
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage(getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                return;
+            }else{
+                Log.d("ABG", "Purchase Done 2");
+                Toast.makeText(getBaseContext(), "Purchase Done", Toast.LENGTH_LONG).show();
+                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor aEditor = aSharedPref.edit();
+                aEditor.putString("is_app_purchased", "y");
+                aEditor.commit();
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage(getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                return;
+            }
+        }
+    };
 
     public void updateTabs(String iClassName){
         mAdapter.setTabName(iClassName);

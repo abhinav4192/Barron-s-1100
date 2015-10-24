@@ -12,6 +12,7 @@
     android:orderInCategory="1" />
 <item android:id="@+id/action_reset"
         android:title="Reset"
+    android:icon="@drawable/ic_reset_white"
         android:showAsAction="always"
         android:orderInCategory="2" />
 
