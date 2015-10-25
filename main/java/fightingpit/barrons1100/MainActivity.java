@@ -54,6 +54,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final ActionBar actionBar = getActionBar();
+        // Specify that tabs should be displayed in the action bar.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setHomeButtonEnabled(false);
+
         mAdView = (AdView) findViewById(R.id.adView);
 
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
@@ -88,16 +93,12 @@ public class MainActivity extends FragmentActivity {
             aEditor.commit();
         }
 
-        final ActionBar actionBar = getActionBar();
+
 
         // Initilization
         mAdapter = new TabsPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
         mViewPager.setAdapter(mAdapter);
-
-        // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setHomeButtonEnabled(false);
 
         // Tab Navigation Select.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {

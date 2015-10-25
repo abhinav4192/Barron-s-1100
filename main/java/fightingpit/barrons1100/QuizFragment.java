@@ -22,17 +22,17 @@ public class QuizFragment extends Fragment {
 
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
-//        if("y".equals(aIsAppPurchased)){
-//            getFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.fl_qmf_fragment_holder, new PurchasedQuizFragment())
-//                    .commit();
-//        }else{
+        if("y".equals(aIsAppPurchased)){
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fl_qmf_fragment_holder, new PurchasedQuizFragment())
+                    .commit();
+        }else{
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.fl_qmf_fragment_holder, new BuyAppFragment(),"BuyFragment")
                     .commit();
-        //}
+        }
         return rootView;
     }
 }

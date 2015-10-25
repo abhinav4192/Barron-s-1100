@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
@@ -56,6 +58,8 @@ public class BuyAppFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -63,6 +67,9 @@ public class BuyAppFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_buy_app, container, false);
+
+        TextView aBuyText = (TextView) rootView.findViewById(R.id.tv_fba_word);
+        aBuyText.setText(Html.fromHtml("Upgrade to premium version.<br>1) Enable Quiz<br>2) Disable Advertisements"));
 
         mHelper = new IabHelper(getActivity(), getResources().getString(R.string.base64EncodedPublicKey));
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
