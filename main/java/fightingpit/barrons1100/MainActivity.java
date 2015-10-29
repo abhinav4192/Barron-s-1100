@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
@@ -42,12 +43,21 @@ public class MainActivity extends FragmentActivity {
     private final Integer mMaxProgress = 3;
     public Context context;
     private AdView mAdView;
+    boolean uView =false;
 
     // Billing Helper
     IabHelper mHelper;
 
     // Tab titles
     private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
+
+    public boolean isuView() {
+        return uView;
+    }
+
+    public void setuView(boolean uView) {
+        this.uView = uView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +106,7 @@ public class MainActivity extends FragmentActivity {
 
 
         // Initilization
-        mAdapter = new TabsPagerAdapter(getFragmentManager());
+        mAdapter = new TabsPagerAdapter(getFragmentManager(),this);
         mViewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
         mViewPager.setAdapter(mAdapter);
 
@@ -104,6 +114,7 @@ public class MainActivity extends FragmentActivity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 final ActionBar.Tab aTab = tab;
+                uView =true;
                 if(aExpandButton!=null){
                     if(tab.getPosition()==0){
                         aExpandButton.setVisible(true);
@@ -160,12 +171,13 @@ public class MainActivity extends FragmentActivity {
                         mResetButton.setVisible(false);
                     }
                 }
-                final Integer aPos = position;
-                if(aPos==0){
-                    updateTabs("WordListFragment");
-                }else if(aPos==2){
-                    updateTabs("QuizFragment");
-                }
+                uView =true;
+//                final Integer aPos = position;
+////                if(aPos==0){
+////                    updateTabs("WordListFragment");
+////                }else if(aPos==2){
+////                    updateTabs("QuizFragment");
+////                }
             }
 
             @Override
@@ -204,9 +216,8 @@ public class MainActivity extends FragmentActivity {
             }catch (Exception e){
                 Log.d("ABG", "Exception caught while Setting up Helper:" + e);
                 Toast.makeText(getBaseContext(),
-                        "Cannot fetch premium status.Connect to Internet and start Application again",
+                        "Cannot fetch premium upgrade status.Connect to Internet and start Application again",
                         Toast.LENGTH_LONG).show();
-
                 // Exception Caught. Show ads.
                 AdRequest adRequest = new AdRequest.Builder().build();
                 mAdView.loadAd(adRequest);
@@ -415,6 +426,7 @@ public class MainActivity extends FragmentActivity {
     };
 
     public void updateTabs(String iClassName){
+        Log.d("ABG", "UpdateTabsExcept:" + iClassName);
         mAdapter.setTabName(iClassName);
         mAdapter.notifyDataSetChanged();
     }

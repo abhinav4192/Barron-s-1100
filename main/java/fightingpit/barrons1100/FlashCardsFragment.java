@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,8 +274,6 @@ public class FlashCardsFragment extends Fragment{
         flipCardToFront(false);
     }
 
-
-
     public void flipCardToFront(boolean iFlipCardDirection){
 
         if(mWordList.size()>0){
@@ -315,7 +312,6 @@ public class FlashCardsFragment extends Fragment{
                         .replace(R.id.fl_fcf_cardView_holder, aFrontFragment)
                         .addToBackStack(null)
                         .commit();
-
             }
 
         }else{

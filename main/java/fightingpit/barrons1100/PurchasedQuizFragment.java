@@ -55,7 +55,6 @@ public class PurchasedQuizFragment extends Fragment {
 
 
 
-    // TODO: Rename and change types and number of parameters
     public static PurchasedQuizFragment newInstance() {
         PurchasedQuizFragment fragment = new PurchasedQuizFragment();
         return fragment;
@@ -411,7 +410,5 @@ public class PurchasedQuizFragment extends Fragment {
             }
         });
         mMainCardView.startAnimation(aOut);
-
-
     }
 }

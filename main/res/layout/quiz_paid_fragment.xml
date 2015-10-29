@@ -99,18 +99,25 @@
                     <RadioButton android:id="@+id/rb_qpf_option1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="paying for goods or services or to recompense for losses"/>
                     <RadioButton android:id="@+id/rb_qpf_option2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="a person who joins with another in carrying out some plan"/>
                     <RadioButton android:id="@+id/rb_qpf_option3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="a slender upright spire at the top of a buttress of tower"/>
                     <RadioButton android:id="@+id/rb_qpf_option4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="state of uncertainty in a choice between unfavorable options"/>
                 </RadioGroup>
             </LinearLayout>
@@ -131,7 +138,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="No word match the selected criteria. Change criteria."
                 android:padding="8dp"
