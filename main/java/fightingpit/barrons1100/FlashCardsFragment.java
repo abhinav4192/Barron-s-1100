@@ -167,9 +167,6 @@ public class FlashCardsFragment extends Fragment{
                 .replace(R.id.fl_fcf_cardView_holder, aBackFragment)
                 .addToBackStack(null)
                 .commit();
-
-        //mWordSelectionTextView.setText("Learning: " + mWordList.get(mRandomIndex).getWord());
-
     }
 
     public void OnCorrectClicked(){

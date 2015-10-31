@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
@@ -43,20 +42,18 @@ public class MainActivity extends FragmentActivity {
     private final Integer mMaxProgress = 3;
     public Context context;
     private AdView mAdView;
-    boolean uView =false;
-
+    boolean mUpdateView =false;
     // Billing Helper
     IabHelper mHelper;
-
     // Tab titles
     private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
 
-    public boolean isuView() {
-        return uView;
+    public boolean getUpdateView() {
+        return mUpdateView;
     }
 
-    public void setuView(boolean uView) {
-        this.uView = uView;
+    public void setUpdateView(boolean iToUpdateView) {
+        this.mUpdateView = iToUpdateView;
     }
 
     @Override
@@ -103,8 +100,6 @@ public class MainActivity extends FragmentActivity {
             aEditor.commit();
         }
 
-
-
         // Initilization
         mAdapter = new TabsPagerAdapter(getFragmentManager(),this);
         mViewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
@@ -114,7 +109,7 @@ public class MainActivity extends FragmentActivity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 final ActionBar.Tab aTab = tab;
-                uView =true;
+                setUpdateView(true);
                 if(aExpandButton!=null){
                     if(tab.getPosition()==0){
                         aExpandButton.setVisible(true);
@@ -171,13 +166,7 @@ public class MainActivity extends FragmentActivity {
                         mResetButton.setVisible(false);
                     }
                 }
-                uView =true;
-//                final Integer aPos = position;
-////                if(aPos==0){
-////                    updateTabs("WordListFragment");
-////                }else if(aPos==2){
-////                    updateTabs("QuizFragment");
-////                }
+                setUpdateView(true);
             }
 
             @Override
@@ -201,7 +190,7 @@ public class MainActivity extends FragmentActivity {
                         if (!result.isSuccess()) {
                             Log.d("ABG", "Problem setting up In-app Billing: " + result);
                             Toast.makeText(getBaseContext(),
-                                    "Cannot fetch premium status.Connect to Internet and start Application again",
+                                    "Cannot fetch premium status .Connect to internet and restart application.",
                                     Toast.LENGTH_LONG).show();
 
                             // Error. Show advertisements.
@@ -258,6 +247,7 @@ public class MainActivity extends FragmentActivity {
                     mAdView.loadAd(adRequest);
             }
             else {
+                Log.d("ABG", "Purchase Query Success");
                 SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
                 SharedPreferences.Editor aEditor = aSharedPref.edit();
                 String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
@@ -426,7 +416,6 @@ public class MainActivity extends FragmentActivity {
     };
 
     public void updateTabs(String iClassName){
-        Log.d("ABG", "UpdateTabsExcept:" + iClassName);
         mAdapter.setTabName(iClassName);
         mAdapter.notifyDataSetChanged();
     }
@@ -463,6 +452,7 @@ public class MainActivity extends FragmentActivity {
             if(dialog != null && dialog.isShowing()){
                 dialog.dismiss();
             }
+            // Set Tab name as empty, so that all tabs get refreshed.
             mAdapter.setTabName("");
             mAdapter.notifyDataSetChanged();
 

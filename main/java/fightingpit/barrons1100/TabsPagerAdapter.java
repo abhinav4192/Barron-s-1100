@@ -5,12 +5,9 @@ package fightingpit.barrons1100;
  */
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -68,21 +65,15 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public void finishUpdate(ViewGroup container) {
         super.finishUpdate(container);
-        if(mPrimaryItemId == 1 && ((MainActivity) mContext).isuView()) {
-            Log.d("ABG", "Selected 1");
-            ((MainActivity) mContext).setuView(false);
-            ((MainActivity) mContext).updateTabs("FlashCardsFragment");
-        }
-        else if(mPrimaryItemId == 0 && ((MainActivity) mContext).isuView()) {
-            Log.d("ABG", "Selected 0");
-            ((MainActivity) mContext).setuView(false);
+        if(mPrimaryItemId == 0 && ((MainActivity) mContext).getUpdateView()) {
+            ((MainActivity) mContext).setUpdateView(false);
             ((MainActivity) mContext).updateTabs("WordListFragment");
-        }
-        else if(mPrimaryItemId == 2 && ((MainActivity) mContext).isuView()) {
-            Log.d("ABG", "Selected 2");
-            ((MainActivity) mContext).setuView(false);
+        }else if(mPrimaryItemId == 1 && ((MainActivity) mContext).getUpdateView()) {
+            ((MainActivity) mContext).setUpdateView(false);
+            ((MainActivity) mContext).updateTabs("FlashCardsFragment");
+        }else if(mPrimaryItemId == 2 && ((MainActivity) mContext).getUpdateView()) {
+            ((MainActivity) mContext).setUpdateView(false);
             ((MainActivity) mContext).updateTabs("QuizFragment");
         }
     }
-
 }
