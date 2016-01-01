@@ -13,15 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class WordListFragment extends Fragment {
 
     private static ExpandableListView mExpandableListView;
+    @Bind(R.id.cv_wlf_cardView) CardView mCardView;
     private static AdapterExpandableWordList mAdapterExpandableWordList;
     private static List<GenericContainer> mWordList = new ArrayList<>();
     ArrayList<String> mMeaningList = new ArrayList<>();
@@ -33,10 +36,10 @@ public class WordListFragment extends Fragment {
 
         context = container.getContext();
         View rootView = inflater.inflate(R.layout.word_list_fragment, container, false);
-
-        TextView mNoWord = (TextView) rootView.findViewById(R.id.tv_wlf_no_word);
-        CardView mCardView = (CardView) rootView.findViewById(R.id.cv_wlf_cardView);
+        ButterKnife.bind(this, rootView);
         mCardView.setVisibility(View.GONE);
+
+        mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
 
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aFilerPref = aSharedPref.getString("filter_pref", "");
@@ -69,7 +72,6 @@ public class WordListFragment extends Fragment {
             mMeaningList.add(aWordInfo.getMeaning());
         }
         // Putting data in List View.
-        mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
         mAdapterExpandableWordList = new AdapterExpandableWordList(context,mWordList, mMeaningList);
         mAdapterExpandableWordList
                 .setInflater(
@@ -181,5 +183,11 @@ public class WordListFragment extends Fragment {
             aEditor.apply();
         }
         return aIndexList;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

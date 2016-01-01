@@ -22,58 +22,33 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class FlashCardsFragment extends Fragment{
 
-    private Button mCorrect;
-    private Button mWrong;
-    private Button mShowMeaning;
-    private TextView mWordSelectionTextView;
+    @Bind(R.id.bt_fcf_correct) Button mCorrect;
+    @Bind(R.id.bt_fcf_wrong) Button mWrong;
+    @Bind(R.id.bt_fcf_show_meaning)Button mShowMeaning;
+    @Bind(R.id.tv_fcf_word_selection) TextView mWordSelectionTextView;
+    @Bind(R.id.pb_fcf_set_progress) ProgressBar mProgressBar;
     private List<GenericContainer> mWordList;
     private Random mRandomGenerator;
     private Integer mRandomIndex =0;
-    private ProgressBar mProgressBar;
     private List<GenericContainer> mWordListFromDb;
     private final Integer mMaxProgress = 3;
     private String mSetSelectorText;
-    private final String mNoWords = "No word match the selected criteria. Change criteria.";
-    private final String mAllMastered = "All words mastered in selected criteria. Reset progress or change criteria.";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.flash_cards_fragment, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mCorrect = (Button) rootView.findViewById(R.id.bt_fcf_correct);
         mCorrect.setVisibility(View.GONE);
-        mCorrect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnCorrectClicked();
-            }
-        });
-
-
-        mWrong = (Button) rootView.findViewById(R.id.bt_fcf_wrong);
         mWrong.setVisibility(View.GONE);
-        mWrong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnWrongClicked();
-            }
-        });
-
-        mShowMeaning = (Button) rootView.findViewById(R.id.bt_fcf_show_meaning);
-        mShowMeaning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onShowMeaningClicked();
-
-            }
-        });
-
-        mWordSelectionTextView = (TextView) rootView.findViewById(R.id.tv_fcf_word_selection);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_fcf_set_progress);
         mSetSelectorText = new String();
         return rootView;
     }
@@ -127,7 +102,7 @@ public class FlashCardsFragment extends Fragment{
             mShowMeaning.setVisibility(View.GONE);
             Fragment aBlankFragment = new BlankFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("Text", mNoWords);
+            bundle.putInt("Text", R.string.no_words);
             aBlankFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()
@@ -138,7 +113,7 @@ public class FlashCardsFragment extends Fragment{
             mShowMeaning.setVisibility(View.GONE);
             Fragment aBlankFragment = new BlankFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("Text", mAllMastered);
+            bundle.putInt("Text", R.string.all_words_mastered);
             aBlankFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()
@@ -148,7 +123,7 @@ public class FlashCardsFragment extends Fragment{
         }
     }
 
-    public void onShowMeaningClicked(){
+    @OnClick(R.id.bt_fcf_show_meaning) void onShowMeaningClicked(){
         mShowMeaning.setVisibility(View.GONE);
         mCorrect.setVisibility(View.VISIBLE);
         mWrong.setVisibility(View.VISIBLE);
@@ -169,7 +144,7 @@ public class FlashCardsFragment extends Fragment{
                 .commit();
     }
 
-    public void OnCorrectClicked(){
+    @OnClick(R.id.bt_fcf_correct) void OnCorrectClicked(){
         mCorrect.setVisibility(View.GONE);
         mWrong.setVisibility(View.GONE);
         final String aWord = mWordList.get(mRandomIndex).getWord();
@@ -241,7 +216,7 @@ public class FlashCardsFragment extends Fragment{
         }
     }
 
-    public void OnWrongClicked(){
+    @OnClick(R.id.bt_fcf_wrong) void OnWrongClicked() {
         mCorrect.setVisibility(View.GONE);
         mWrong.setVisibility(View.GONE);
         final String aWord = mWordList.get(mRandomIndex).getWord();
@@ -315,7 +290,7 @@ public class FlashCardsFragment extends Fragment{
             mShowMeaning.setVisibility(View.GONE);
             Fragment aBlankFragment = new BlankFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("Text", mAllMastered);
+            bundle.putInt("Text", R.string.all_words_mastered);
             aBlankFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()

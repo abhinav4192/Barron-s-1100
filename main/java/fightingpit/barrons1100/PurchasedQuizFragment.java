@@ -25,26 +25,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class PurchasedQuizFragment extends Fragment {
 
-    private TextView mWordSelectionTextView;
-    private ProgressBar mProgressBar;
-    private TextView mWord;
-    private ImageView mFavImage;
-    private RadioGroup mRadioGroup;
-    private RadioButton mOption1;
-    private RadioButton mOption2;
-    private RadioButton mOption3;
-    private RadioButton mOption4;
-    private Button mCheck;
-    private Button mNextWord;
-    private CardView mMainCardView;
-    private CardView mNoWordCardView;
-    private TextView mNoWordText;
+    @Bind(R.id.tv_qpf_word_selection) TextView mWordSelectionTextView;
+    @Bind(R.id.pb_qpf_set_progress) ProgressBar mProgressBar;
+    @Bind(R.id.tv_qpf_word) TextView mWord;
+    @Bind(R.id.iv_qpf_fav) ImageView mFavImage;
+    @Bind(R.id.rg_qpf_radio_group) RadioGroup mRadioGroup;
+    @Bind(R.id.rb_qpf_option1) RadioButton mOption1;
+    @Bind(R.id.rb_qpf_option2) RadioButton mOption2;
+    @Bind(R.id.rb_qpf_option3) RadioButton mOption3;
+    @Bind(R.id.rb_qpf_option4) RadioButton mOption4;
+    @Bind(R.id.bt_qpf_check) Button mCheck;
+    @Bind(R.id.bt_qpf_next) Button mNextWord;
+    @Bind(R.id.cv_qpf_cardView) CardView mMainCardView;
+    @Bind(R.id.cv_qpf_noWordView) CardView mNoWordCardView;
+    @Bind(R.id.tv_qpf_no_word) TextView mNoWordText;
 
-    private final String mNoWords = "No word match the selected criteria. Change criteria.";
-    private final String mAllMastered = "All words mastered in selected criteria. Reset progress or change criteria.";
     private List<GenericContainer> mWordList;
     private List<GenericContainer> mWordListFromDb;
     private final Integer mMaxProgress = 3;
@@ -52,8 +54,6 @@ public class PurchasedQuizFragment extends Fragment {
     private Integer mRandomIndex =0;
     private Random mRandomGenerator;
     private List<GenericContainer> mAllWordsListFromDb;
-
-
 
     public static PurchasedQuizFragment newInstance() {
         PurchasedQuizFragment fragment = new PurchasedQuizFragment();
@@ -74,37 +74,11 @@ public class PurchasedQuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.quiz_paid_fragment, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mWordSelectionTextView = (TextView) rootView.findViewById(R.id.tv_qpf_word_selection);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_qpf_set_progress);
-        mWord = (TextView) rootView.findViewById(R.id.tv_qpf_word);
-        mFavImage = (ImageView) rootView.findViewById(R.id.iv_qpf_fav);
-        mRadioGroup = (RadioGroup) rootView.findViewById(R.id.rg_qpf_radio_group);
-        mOption1 = (RadioButton) rootView.findViewById(R.id.rb_qpf_option1);
-        mOption2 = (RadioButton) rootView.findViewById(R.id.rb_qpf_option2);
-        mOption3 = (RadioButton) rootView.findViewById(R.id.rb_qpf_option3);
-        mOption4 = (RadioButton) rootView.findViewById(R.id.rb_qpf_option4);
-        mCheck = (Button) rootView.findViewById(R.id.bt_qpf_check);
-        mNextWord = (Button) rootView.findViewById(R.id.bt_qpf_next);
         mNextWord.setVisibility(View.GONE);
-        mMainCardView = (CardView) rootView.findViewById(R.id.cv_qpf_cardView);
-        mNoWordCardView = (CardView) rootView.findViewById(R.id.cv_qpf_noWordView);
         mNoWordCardView.setVisibility(View.GONE);
-        mNoWordText = (TextView) rootView.findViewById(R.id.tv_qpf_no_word);
         mRandomGenerator = new Random();
-
-        mCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCheckClicked();
-            }
-        });
-        mNextWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onNextWordClicked();
-            }
-        });
         return rootView;
     }
 
@@ -219,19 +193,19 @@ public class PurchasedQuizFragment extends Fragment {
             mCheck.setVisibility(View.GONE);
             mNextWord.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
-            mNoWordText.setText(mNoWords);
+            mNoWordText.setText(R.string.no_words);
             mNoWordCardView.setVisibility(View.VISIBLE);
         }else{
             mMainCardView.setVisibility(View.GONE);
             mCheck.setVisibility(View.GONE);
             mNextWord.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
-            mNoWordText.setText(mAllMastered);
+            mNoWordText.setText(R.string.all_words_mastered);
             mNoWordCardView.setVisibility(View.VISIBLE);
         }
     }
 
-    public void onCheckClicked(){
+    @OnClick(R.id.bt_qpf_check) void onCheckClicked() {
         int id = mRadioGroup.getCheckedRadioButtonId();
         if (id == -1){
             Toast.makeText(getActivity().getBaseContext(),"No option selected",Toast.LENGTH_LONG).show();
@@ -374,7 +348,7 @@ public class PurchasedQuizFragment extends Fragment {
 
     }
 
-    public void onNextWordClicked(){
+    @OnClick(R.id.bt_qpf_next) void onNextWordClicked() {
 
         final Animation aOut = AnimationUtils.loadAnimation(getActivity().getBaseContext(), android.R.anim.fade_out);
         final Animation aIn = AnimationUtils.loadAnimation(getActivity().getBaseContext(),android.R.anim.fade_in);
@@ -410,5 +384,11 @@ public class PurchasedQuizFragment extends Fragment {
             }
         });
         mMainCardView.startAnimation(aOut);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

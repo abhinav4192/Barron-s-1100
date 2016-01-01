@@ -15,18 +15,20 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class SettingsActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
-    private ImageView mSortAlphabetically;
-    private ImageView mShuffle;
-    private Spinner mFilerSelector;
+    @Bind(R.id.iv_as_aplha) ImageView mSortAlphabetically;
+    @Bind(R.id.iv_as_shuffle) ImageView mShuffle;
+    @Bind(R.id.sp_as_filter_selector ) Spinner mFilerSelector;
+    @Bind(R.id.iv_as_fav_all) ImageView mAllButton;
+    @Bind(R.id.iv_as_fav_marked) ImageView mFavButton;
+    @Bind(R.id.iv_as_fav_unmarked) ImageView mUnmarkedButton;
+    @Bind(R.id.bt_as_done) Button mDone;
+
     private boolean isFirstTime = true;
-
-    private ImageView mAllButton;
-    private ImageView mFavButton;
-    private ImageView mUnmarkedButton;
-    private Button mDone;
-
     private String aSortPref = new String();
     private String aFavPref = new String();
     private String aFilterPref = new String();
@@ -35,14 +37,13 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
 
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         aSortPref = aSharedPref.getString("sort_pref", "");
         aFavPref = aSharedPref.getString("fav_pref","");
         aFilterPref = aSharedPref.getString("filter_pref","");
 
-        mSortAlphabetically = (ImageView) findViewById(R.id.iv_as_aplha);
-        mShuffle = (ImageView) findViewById(R.id.iv_as_shuffle);
 
         // Set Proper Image for Sort
         if(aSortPref.equalsIgnoreCase("alpha")){
@@ -72,13 +73,8 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             }
         });
 
-        mFilerSelector = (Spinner) findViewById(R.id.sp_as_filter_selector);
         populateFilterSelector();
         mFilerSelector.setOnItemSelectedListener(this);
-
-        mAllButton = (ImageView) findViewById(R.id.iv_as_fav_all);
-        mFavButton = (ImageView) findViewById(R.id.iv_as_fav_marked);
-        mUnmarkedButton = (ImageView) findViewById(R.id.iv_as_fav_unmarked);
 
         // Set Proper Image for Favourite Pref
         if(aFavPref.equalsIgnoreCase("a")){
@@ -88,6 +84,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         }else{
             mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_green);
         }
+
         mAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +94,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
                 mUnmarkedButton.setImageResource(R.drawable.ic_star_outline_grey);
             }
         });
+
         mFavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +115,6 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             }
         });
 
-        mDone = (Button) findViewById(R.id.bt_as_done);
         mDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,8 +3,8 @@
     <string name="banner_ad_unit_id"> ca-app-pub-7750967006737997/4783167060</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="base64EncodedPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAocojvayj32cV4tjBRWM2fa7zPrgYvBYoaAqfcZAcDrFgtFLNTF630HqJq2aFPqlauqTNTf1MYCjLzJwm4NDTDS8ludtzj/81yaSX7A9cShE+tX/nhkUwOmWeSLnFEa+wazhWRmDPBe2DOEcYTA8QVI2YRGaoW7yx0seeUB721gwEmjyQhGyJGzGa8Qx2+7nyYsy6T9T3V9fHFvEn5PmNtF8aexUMx5Z4VITs1PzfcLbVGdeBCqi3MUXeTLGEiXyxwPWvuPYUC8TmDHDyBN/SQCwvHTKPJt2WddPTT0e6nzEI6wn73GasDSHWB+at6+iQYyoAiznhPKUNpbRP+Vr2fwIDAQAB</string>
+    <string name="no_words">No word match the selected criteria. Change criteria.</string>
+    <string name="all_words_mastered">All words mastered in selected criteria. Reset progress or change criteria.</string>
 
 </resources>

@@ -28,6 +28,8 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import fightingpit.barrons1100.util.IabHelper;
 import fightingpit.barrons1100.util.IabResult;
 import fightingpit.barrons1100.util.Inventory;
@@ -35,13 +37,13 @@ import fightingpit.barrons1100.util.Purchase;
 
 public class MainActivity extends FragmentActivity {
 
-    private ViewPager mViewPager;
+    @Bind(R.id.tab_nav_pager) ViewPager mViewPager;
+    @Bind(R.id.adView) AdView mAdView;
     private TabsPagerAdapter mAdapter;
     MenuItem aExpandButton;
     MenuItem mResetButton;
     private final Integer mMaxProgress = 3;
     public Context context;
-    private AdView mAdView;
     boolean mUpdateView =false;
     // Billing Helper
     IabHelper mHelper;
@@ -60,49 +62,16 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         final ActionBar actionBar = getActionBar();
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setHomeButtonEnabled(false);
 
-        mAdView = (AdView) findViewById(R.id.adView);
-
-        SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-        SharedPreferences.Editor aEditor = aSharedPref.edit();
-
-        // If App is running for first time, set list Preference
-        String aListViewPref = aSharedPref.getString("list_view_pref", "");
-        if(aListViewPref.equalsIgnoreCase("")){
-            aEditor.putString("list_view_pref", "contracted");
-            aEditor.commit();
-        }
-
-        // If App is running for first time, set fav Preference
-        String aFavPref = aSharedPref.getString("fav_pref", "");
-        if(aFavPref.equalsIgnoreCase("")){
-            aEditor.putString("fav_pref", "a");
-            aEditor.commit();
-        }
-
-        // If App is running for first time, set Filter Preference
-        String aFilerPref = aSharedPref.getString("filter_pref", "");
-        if(aFilerPref.equalsIgnoreCase("")){
-            aEditor.putString("filter_pref", "All");
-            aEditor.commit();
-        }
-
-
-        // If App is running for first time, set Sort Preference
-        String aSortPref = aSharedPref.getString("sort_pref", "");
-        if(aSortPref.equalsIgnoreCase("")){
-            aEditor.putString("sort_pref", "alpha");
-            aEditor.commit();
-        }
-
+        initializeAppSettings();
         // Initilization
         mAdapter = new TabsPagerAdapter(getFragmentManager(),this);
-        mViewPager = (ViewPager) findViewById(R.id.tab_nav_pager);
         mViewPager.setAdapter(mAdapter);
 
         // Tab Navigation Select.
@@ -177,8 +146,9 @@ public class MainActivity extends FragmentActivity {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
-        context = getBaseContext();
 
+        context = getBaseContext();
+        SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
         if(aIsAppPurchased.equals("")){
             // App is running for first time, check if app has been purchased or not.
@@ -456,6 +426,40 @@ public class MainActivity extends FragmentActivity {
             mAdapter.setTabName("");
             mAdapter.notifyDataSetChanged();
 
+        }
+    }
+
+    public void initializeAppSettings() {
+        SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor aEditor = aSharedPref.edit();
+
+        // If App is running for first time, set list Preference
+        String aListViewPref = aSharedPref.getString("list_view_pref", "");
+        if(aListViewPref.equalsIgnoreCase("")){
+            aEditor.putString("list_view_pref", "contracted");
+            aEditor.commit();
+        }
+
+        // If App is running for first time, set fav Preference
+        String aFavPref = aSharedPref.getString("fav_pref", "");
+        if(aFavPref.equalsIgnoreCase("")){
+            aEditor.putString("fav_pref", "a");
+            aEditor.commit();
+        }
+
+        // If App is running for first time, set Filter Preference
+        String aFilerPref = aSharedPref.getString("filter_pref", "");
+        if(aFilerPref.equalsIgnoreCase("")){
+            aEditor.putString("filter_pref", "All");
+            aEditor.commit();
+        }
+
+
+        // If App is running for first time, set Sort Preference
+        String aSortPref = aSharedPref.getString("sort_pref", "");
+        if(aSortPref.equalsIgnoreCase("")){
+            aEditor.putString("sort_pref", "alpha");
+            aEditor.commit();
         }
     }
 }

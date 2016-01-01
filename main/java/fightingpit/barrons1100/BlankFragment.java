@@ -31,8 +31,7 @@ public class BlankFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.no_word_fragment, container, false);
         TextView aTv = (TextView) rootView.findViewById(R.id.tv_nwf_word);
         Bundle bundle = getArguments();
-        String aWord = bundle.getString("Text");
-        aTv.setText(aWord);
+        aTv.setText(bundle.getInt("Text"));
         return rootView;
     }
 

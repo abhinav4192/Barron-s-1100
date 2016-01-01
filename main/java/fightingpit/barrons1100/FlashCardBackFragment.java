@@ -1,18 +1,22 @@
 package fightingpit.barrons1100;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class FlashCardBackFragment extends Fragment {
-    private TextView mWord;
-    private TextView mMeaning;
-    private ImageView mFav;
+    @Bind(R.id.tv_fcb_word) TextView mWord;
+    @Bind(R.id.tv_fcb_meaning) TextView mMeaning;
+    @Bind(R.id.iv_fcb_fav) ImageView mFav;
 
 
     public static FlashCardFrontFragment newInstance() {
@@ -33,10 +37,7 @@ public class FlashCardBackFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.flash_card_back, container, false);
-
-        mWord = (TextView) rootView.findViewById(R.id.tv_fcb_word);
-        mMeaning = (TextView) rootView.findViewById(R.id.tv_fcb_meaning);
-        mFav = (ImageView) rootView.findViewById(R.id.iv_fcb_fav);
+        ButterKnife.bind(this, rootView);
 
         Bundle bundle = getArguments();
         final String aWord = bundle.getString("Word");
@@ -52,23 +53,28 @@ public class FlashCardBackFragment extends Fragment {
         }else{
             mFav.setImageResource(R.drawable.ic_star_outline_black_24dp);
         }
-
-        mFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(aDBHelper.isFavourite(aWord)){
-                    mFav.setImageResource(R.drawable.ic_star_outline_black_24dp);
-                    aDBHelper.updateFavourite(aWord,false);
-
-                }else{
-                    mFav.setImageResource(R.drawable.ic_star_black_24dp);
-                    aDBHelper.updateFavourite(aWord,true);
-                }
-                ((MainActivity) getActivity()).updateTabs("FlashCardsFragment");
-            }
-        });
         aDBHelper.close();
         return rootView;
+    }
+
+    @OnClick(R.id.iv_fcb_fav) void onFavouriteClicked(){
+        final DatabaseHelper aDBHelper = new DatabaseHelper(getActivity().getBaseContext());
+        if(aDBHelper.isFavourite(mWord.getText().toString())){
+            mFav.setImageResource(R.drawable.ic_star_outline_black_24dp);
+            aDBHelper.updateFavourite(mWord.getText().toString(),false);
+
+        }else{
+            mFav.setImageResource(R.drawable.ic_star_black_24dp);
+            aDBHelper.updateFavourite(mWord.getText().toString(),true);
+        }
+        ((MainActivity) getActivity()).updateTabs("FlashCardsFragment");
+        aDBHelper.close();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }
 

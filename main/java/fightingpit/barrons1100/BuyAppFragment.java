@@ -14,13 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import fightingpit.barrons1100.util.IabHelper;
 import fightingpit.barrons1100.util.IabResult;
 import fightingpit.barrons1100.util.Purchase;
 
 public class BuyAppFragment extends Fragment {
 
-    private Button mBuyButton;
+    @Bind(R.id.bt_fba_buy) Button mBuyButton;
     IabHelper mHelper;
     String TAG = "ABG";
 
@@ -36,8 +38,6 @@ public class BuyAppFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -45,9 +45,10 @@ public class BuyAppFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_buy_app, container, false);
+        ButterKnife.bind(this, rootView);
 
         TextView aBuyText = (TextView) rootView.findViewById(R.id.tv_fba_word);
-        aBuyText.setText(Html.fromHtml("Upgrade to premium version.<br>1) Enable Quiz<br>2) Disable Advertisements"));
+        aBuyText.setText(Html.fromHtml("Upgrade to premium version.<br>★ Enable Quiz<br>★ Disable Advertisements"));
 
         try{
             mHelper = new IabHelper(getActivity(), getResources().getString(R.string.base64EncodedPublicKey));
@@ -66,7 +67,6 @@ public class BuyAppFragment extends Fragment {
         }
 
 
-        mBuyButton = (Button) rootView.findViewById(R.id.bt_fba_buy);
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,5 +128,11 @@ public class BuyAppFragment extends Fragment {
                 resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }
