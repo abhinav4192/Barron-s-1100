@@ -49,7 +49,6 @@ public class PurchasedQuizFragment extends Fragment {
 
     private List<GenericContainer> mWordList;
     private List<GenericContainer> mWordListFromDb;
-    private final Integer mMaxProgress = 3;
     private String mSetSelectorText;
     private Integer mRandomIndex =0;
     private Random mRandomGenerator;
@@ -123,8 +122,8 @@ public class PurchasedQuizFragment extends Fragment {
     public void populateRadioGroup(){
         if(mWordList.size()>0){
             // Populate Word and Meanings in Radio Group
-            mProgressBar.setMax(mWordListFromDb.size() * mMaxProgress);
-            mProgressBar.setProgress((mWordListFromDb.size() * mMaxProgress) - mWordList.size());
+            mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
+            mProgressBar.setProgress((mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val)) - mWordList.size());
             mRandomIndex = mRandomGenerator.nextInt(mWordList.size());
             final String aWord = mWordList.get(mRandomIndex).getWord();
             mWord.setText(aWord);
@@ -322,7 +321,7 @@ public class PurchasedQuizFragment extends Fragment {
                 }
                 // Update Progress in DB
                 DatabaseHelper aDBHelper = new DatabaseHelper(getActivity().getBaseContext());
-                aDBHelper.updateProgress(aWord, mMaxProgress);
+                aDBHelper.updateProgress(aWord, getResources().getInteger(R.integer.max_progress_val));
                 aDBHelper.close();
 
                 GenericContainer aTempWordInfo = new GenericContainer();
@@ -336,15 +335,15 @@ public class PurchasedQuizFragment extends Fragment {
                 }
 
                 // Add word maximum times in current list
-                for(int i=0; i< mMaxProgress;i++){
+                for(int i=0; i< getResources().getInteger(R.integer.max_progress_val);i++){
                     mWordList.add(aTempWordInfo);
                 }
                 mNextWord.setVisibility(View.VISIBLE);
             }
             ((MainActivity) getActivity()).updateTabs("QuizFragment");
         }
-        mProgressBar.setMax(mWordListFromDb.size() * mMaxProgress);
-        mProgressBar.setProgress((mWordListFromDb.size() * mMaxProgress) - mWordList.size());
+        mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
+        mProgressBar.setProgress((mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val)) - mWordList.size());
 
     }
 

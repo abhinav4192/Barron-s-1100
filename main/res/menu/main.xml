@@ -3,7 +3,7 @@
     android:title="Settings"
     android:icon="@drawable/ic_settings_white"
     android:showAsAction="always"
-    android:orderInCategory="100"/>
+    android:orderInCategory="3"/>
 
 <item android:id="@+id/action_exp_cont"
     android:title="Expand/Contract"
@@ -15,10 +15,10 @@
     android:icon="@drawable/ic_reset_white"
         android:showAsAction="always"
         android:orderInCategory="2" />
-<item android:id="@+id/rate_app"
-    android:title="Rate the App"
-    android:icon="@drawable/ic_reset_white"
-    android:showAsAction="never"
-    android:orderInCategory="3" />
+<item android:id="@+id/action_popup_menu"
+        android:title="T"
+        android:showAsAction="always"
+        android:orderInCategory="4" />
+
 
 </menu>

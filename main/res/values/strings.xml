@@ -6,5 +6,7 @@
     <string name="base64EncodedPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAocojvayj32cV4tjBRWM2fa7zPrgYvBYoaAqfcZAcDrFgtFLNTF630HqJq2aFPqlauqTNTf1MYCjLzJwm4NDTDS8ludtzj/81yaSX7A9cShE+tX/nhkUwOmWeSLnFEa+wazhWRmDPBe2DOEcYTA8QVI2YRGaoW7yx0seeUB721gwEmjyQhGyJGzGa8Qx2+7nyYsy6T9T3V9fHFvEn5PmNtF8aexUMx5Z4VITs1PzfcLbVGdeBCqi3MUXeTLGEiXyxwPWvuPYUC8TmDHDyBN/SQCwvHTKPJt2WddPTT0e6nzEI6wn73GasDSHWB+at6+iQYyoAiznhPKUNpbRP+Vr2fwIDAQAB</string>
     <string name="no_words">No word match the selected criteria. Change criteria.</string>
     <string name="all_words_mastered">All words mastered in selected criteria. Reset progress or change criteria.</string>
+    <string name="prob_inApp_billing">Problem setting up In-app Billing: </string>
+    <string name="cannot_fetch_premium_status">Cannot fetch premium status .Connect to internet and restart application.</string>
 
 </resources>

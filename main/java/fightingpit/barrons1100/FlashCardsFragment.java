@@ -37,7 +37,6 @@ public class FlashCardsFragment extends Fragment{
     private Random mRandomGenerator;
     private Integer mRandomIndex =0;
     private List<GenericContainer> mWordListFromDb;
-    private final Integer mMaxProgress = 3;
     private String mSetSelectorText;
 
     @Override
@@ -96,8 +95,8 @@ public class FlashCardsFragment extends Fragment{
                     .add(R.id.fl_fcf_cardView_holder, aFrontFragment)
                     .commit();
 
-            mProgressBar.setMax(mWordListFromDb.size() * mMaxProgress);
-            mProgressBar.setProgress((mWordListFromDb.size() * mMaxProgress) - mWordList.size());
+            mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
+            mProgressBar.setProgress((mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val)) - mWordList.size());
         } else if(mWordListFromDb.size()==0){
             mShowMeaning.setVisibility(View.GONE);
             Fragment aBlankFragment = new BlankFragment();
@@ -223,7 +222,7 @@ public class FlashCardsFragment extends Fragment{
 
         // Update Progress in DB
         DatabaseHelper aDBHelper = new DatabaseHelper(getActivity().getBaseContext());
-        aDBHelper.updateProgress(aWord, mMaxProgress);
+        aDBHelper.updateProgress(aWord, getResources().getInteger(R.integer.max_progress_val));
         aDBHelper.close();
         ((MainActivity) getActivity()).updateTabs("FlashCardsFragment");
 
@@ -238,7 +237,7 @@ public class FlashCardsFragment extends Fragment{
         }
 
         // Add word maximum times in current list
-        for(int i=0; i< mMaxProgress;i++){
+        for(int i=0; i< getResources().getInteger(R.integer.max_progress_val);i++){
             mWordList.add(aTempWordInfo);
         }
 
@@ -254,8 +253,8 @@ public class FlashCardsFragment extends Fragment{
             mShowMeaning.setVisibility(View.VISIBLE);
 
             // Set Progress for Criteria
-            mProgressBar.setMax(mWordListFromDb.size() * mMaxProgress);
-            mProgressBar.setProgress((mWordListFromDb.size() * mMaxProgress) - mWordList.size());
+            mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
+            mProgressBar.setProgress((mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val)) - mWordList.size());
 
             Fragment aFrontFragment = new FlashCardFrontFragment();
             Bundle bundle = new Bundle();

@@ -1,35 +1,57 @@
 package fightingpit.barrons1100;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import fightingpit.barrons1100.util.IabHelper;
 import fightingpit.barrons1100.util.IabResult;
 import fightingpit.barrons1100.util.Inventory;
@@ -39,11 +61,14 @@ public class MainActivity extends FragmentActivity {
 
     @Bind(R.id.tab_nav_pager) ViewPager mViewPager;
     @Bind(R.id.adView) AdView mAdView;
+
+    TextView aReminderTimeView;
+
     private TabsPagerAdapter mAdapter;
-    MenuItem aExpandButton;
-    MenuItem mResetButton;
-    private final Integer mMaxProgress = 3;
+    private MenuItem aExpandButton;
+    private MenuItem mResetButton;
     public Context context;
+    // Boolean to control the update of view in cached Tabs
     boolean mUpdateView =false;
     // Billing Helper
     IabHelper mHelper;
@@ -78,6 +103,7 @@ public class MainActivity extends FragmentActivity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 final ActionBar.Tab aTab = tab;
+                // Tabs are to be updated.
                 setUpdateView(true);
                 if(aExpandButton!=null){
                     if(tab.getPosition()==0){
@@ -135,6 +161,7 @@ public class MainActivity extends FragmentActivity {
                         mResetButton.setVisible(false);
                     }
                 }
+                // Tabs are to be updated.
                 setUpdateView(true);
             }
 
@@ -152,36 +179,7 @@ public class MainActivity extends FragmentActivity {
         String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
         if(aIsAppPurchased.equals("")){
             // App is running for first time, check if app has been purchased or not.
-            try {
-                // Setup Billing Helper
-                mHelper = new IabHelper(this, getResources().getString(R.string.base64EncodedPublicKey));
-                mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                    public void onIabSetupFinished(IabResult result) {
-                        if (!result.isSuccess()) {
-                            Log.d("ABG", "Problem setting up In-app Billing: " + result);
-                            Toast.makeText(getBaseContext(),
-                                    "Cannot fetch premium status .Connect to internet and restart application.",
-                                    Toast.LENGTH_LONG).show();
-
-                            // Error. Show advertisements.
-                            AdRequest adRequest = new AdRequest.Builder().build();
-                            mAdView.loadAd(adRequest);
-                        } else {
-                            Log.d("ABG", "Helper Setup Complete");
-                            mHelper.queryInventoryAsync(mGotInventoryListener);
-                        }
-                    }
-                });
-            }catch (Exception e){
-                Log.d("ABG", "Exception caught while Setting up Helper:" + e);
-                Toast.makeText(getBaseContext(),
-                        "Cannot fetch premium upgrade status.Connect to Internet and start Application again",
-                        Toast.LENGTH_LONG).show();
-                // Exception Caught. Show ads.
-                AdRequest adRequest = new AdRequest.Builder().build();
-                mAdView.loadAd(adRequest);
-
-            }
+            checkAppPurchase(true);
         }else{
             // Purchase Status already known.
             if("y".equals(aIsAppPurchased)){
@@ -201,7 +199,50 @@ public class MainActivity extends FragmentActivity {
                 // Loading the Advertisement.
                 AdRequest adRequest = new AdRequest.Builder().build();
                 mAdView.loadAd(adRequest);
+                /**
+                 * App is not running for first time, (just to be sure)check if app has been purchased or not.
+                 * If user cancels order, this will reset the shared pref, thus making quiz option unavailable.
+                 */
+                checkAppPurchase(false);
             }
+        }
+
+    }
+
+    void checkAppPurchase(final Boolean iWithToast){
+        try {
+            // Setup Billing Helper
+            mHelper = new IabHelper(this, getResources().getString(R.string.base64EncodedPublicKey));
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    if (!result.isSuccess()) {
+                        Log.d("ABG", getResources().getString(R.string.prob_inApp_billing) + result);
+                        if(iWithToast){
+                            Toast.makeText(getBaseContext(),
+                                    getResources().getString(R.string.cannot_fetch_premium_status),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+
+                        // Error. Show advertisements.
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        mAdView.loadAd(adRequest);
+                    } else {
+                        Log.d("ABG", "Helper Setup Complete");
+                        mHelper.queryInventoryAsync(mGotInventoryListener);
+                    }
+                }
+            });
+        }catch (Exception e){
+            Log.d("ABG", "Exception caught while Setting up Helper:" + e);
+            if(iWithToast) {
+                Toast.makeText(getBaseContext(),
+                        getResources().getString(R.string.cannot_fetch_premium_status),
+                        Toast.LENGTH_LONG).show();
+            }
+            // Exception Caught. Show ads.
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
         }
     }
 
@@ -220,7 +261,6 @@ public class MainActivity extends FragmentActivity {
                 Log.d("ABG", "Purchase Query Success");
                 SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
                 SharedPreferences.Editor aEditor = aSharedPref.edit();
-                String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
 
                 // does the user have the premium upgrade?
                 boolean mIsPremium = inventory.hasPurchase("premium");
@@ -253,7 +293,6 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -281,6 +320,10 @@ public class MainActivity extends FragmentActivity {
             Intent i = new Intent(this,SettingsActivity.class);
             startActivityForResult(i, 100);
             return true;
+        }
+
+        if(id == R.id.action_popup_menu){
+            handlePopupMenu();
         }
 
         if(id==R.id.action_exp_cont){
@@ -335,7 +378,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("ABG","OnActivityResultCalled. RequestCode:" + String.valueOf(requestCode) + " : resultCode:" + String.valueOf(resultCode));
+        Log.d("ABG", "OnActivityResultCalled. RequestCode:" + String.valueOf(requestCode) + " : resultCode:" + String.valueOf(resultCode));
         // Check which request we're responding to
         if (requestCode == 100) {
             // Settings Activity finished.
@@ -413,7 +456,7 @@ public class MainActivity extends FragmentActivity {
             }
             aDBHelper.close();
             for (GenericContainer aWordInfo : mWordListFromDb) {
-                aDBHelper.updateProgress(aWordInfo.getWord(), mMaxProgress);
+                aDBHelper.updateProgress(aWordInfo.getWord(), getResources().getInteger(R.integer.max_progress_val));
             }
             return null;
         }
@@ -461,5 +504,187 @@ public class MainActivity extends FragmentActivity {
             aEditor.putString("sort_pref", "alpha");
             aEditor.commit();
         }
+
+        // If App is running for first time, set Reminder Preference
+        String aReminderPref = aSharedPref.getString("reminder_pref", "");
+        if(aReminderPref.equalsIgnoreCase("")){
+            aEditor.putString("reminder_pref", "y");
+            aEditor.commit();
+        }
+
+        // If App is running for first time, set Reminder Time
+        String aReminderTime = aSharedPref.getString("reminder_time", "");
+        if(aReminderTime.equalsIgnoreCase("")){
+            setReminderTime("10:30 AM",10,30);
+        }
+    }
+
+    void handlePopupMenu(){
+
+        // Inflate a new popup.
+        final PopupWindow popup = new PopupWindow(getBaseContext());
+        View aPopUpView = getLayoutInflater().inflate(R.layout.popup_reminder, null);
+
+        // Get Resources from View
+        TextView aRateApp = (TextView) aPopUpView.findViewById(R.id.tv_pr_rate_app);
+        Switch aReminderToggle = (Switch) aPopUpView.findViewById(R.id.sw_pr_reminder);
+        final LinearLayout aLayoutReminderTime = (LinearLayout) aPopUpView.findViewById(R.id.ll_pr_reminder_time);
+        aReminderTimeView = (TextView) aPopUpView.findViewById(R.id.tv_pr_reminder_time_view);
+
+        final SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+
+        // Show Proper status of Switch.
+        String aReminderPreference = aSharedPref.getString("reminder_pref", "");
+        if("y".equalsIgnoreCase(aReminderPreference)){
+            aReminderToggle.setChecked(true);
+            aLayoutReminderTime.setVisibility(View.VISIBLE);
+        }else{
+            aReminderToggle.setChecked(false);
+            aLayoutReminderTime.setVisibility(View.GONE);
+        }
+
+        // Set proper reminder time.
+        String aReminderTime = aSharedPref.getString("reminder_time", "");
+        aReminderTimeView.setText(aReminderTime);
+
+        // Change Reminder Time
+        aReminderTimeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getFragmentManager(), "timePicker");
+            }
+        });
+
+        // Display the popup, anchored to Menu button.
+        popup.setContentView(aPopUpView);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+        popup.setBackgroundDrawable(new ColorDrawable(0xFFF2F2F2));
+        popup.setElevation(8);
+        View aMenuView = findViewById(R.id.action_popup_menu);
+        popup.showAsDropDown(aMenuView);
+
+        // User enables, or disables reminder
+        aReminderToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor aEditor = aSharedPref.edit();
+                if(isChecked){
+                    aLayoutReminderTime.setVisibility(View.VISIBLE);
+                    aEditor.putString("reminder_pref", "y");
+                    aEditor.commit();
+                }else{
+                    aLayoutReminderTime.setVisibility(View.GONE);
+                    aEditor.putString("reminder_pref", "n");
+                    aEditor.commit();
+                    unsetReminder();
+                }
+            }
+        });
+
+        // User wants to rate application.
+        aRateApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                // To count with Play market backstack, After pressing back button,
+                // to taken back to our application, we need to add following flags to intent.
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
+                }
+            }
+        });
+    }
+
+    // Time-picker for Reminder.
+    static public class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+            String aTimeFormat = new String();
+            if(hourOfDay<12){
+                String aHour = String.valueOf(hourOfDay);
+                if(aHour.length()<2){
+                    aHour = "0" + aHour;
+                }
+                String aMinute = String.valueOf(minute);
+                if(aMinute.length() <2){
+                    aMinute = "0" + aMinute;
+                }
+                aTimeFormat = aHour + ":" + aMinute + " AM";
+            }else{
+                String aHour = String.valueOf(hourOfDay-12);
+                if(aHour.length()<2){
+                    aHour = "0" + aHour;
+                }
+                String aMinute = String.valueOf(minute);
+                if(aMinute.length() <2){
+                    aMinute = "0" + aMinute;
+                }
+                aTimeFormat = aHour + ":" + aMinute + " PM";
+            }
+            ((MainActivity) getActivity()).setReminderTime(aTimeFormat, hourOfDay, minute);
+        }
+    }
+
+    // Disables reminder notifications.
+    void unsetReminder(){
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(this , NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
+        alarmMgr.cancel(pendingIntent);
+    }
+
+    // Set Reminder Time and Notification
+    void setReminderTime(String iText, int iHourOfDay, int iMinute){
+
+        // Set Shared preference for future use.
+        final SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor aEditor = aSharedPref.edit();
+        aEditor.putString("reminder_time", iText);
+        aEditor.commit();
+
+        // Set time in popup menu.
+        if(aReminderTimeView!=null){
+            aReminderTimeView.setText(iText);
+        }
+
+        // Set Actual repeating notification reminder.
+        Intent myIntent = new Intent(this , NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, iHourOfDay);
+        calendar.set(Calendar.MINUTE, iMinute);
+
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.cancel(pendingIntent);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }
