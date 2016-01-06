@@ -1,12 +1,11 @@
 package fightingpit.barrons1100;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -19,14 +18,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +32,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -51,37 +48,23 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import fightingpit.barrons1100.util.IabHelper;
 import fightingpit.barrons1100.util.IabResult;
 import fightingpit.barrons1100.util.Inventory;
 import fightingpit.barrons1100.util.Purchase;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends Activity {
 
     @Bind(R.id.tab_nav_pager) ViewPager mViewPager;
     @Bind(R.id.adView) AdView mAdView;
-
     TextView aReminderTimeView;
-
     private TabsPagerAdapter mAdapter;
     private MenuItem aExpandButton;
     private MenuItem mResetButton;
     public Context context;
-    // Boolean to control the update of view in cached Tabs
-    boolean mUpdateView =false;
-    // Billing Helper
-    IabHelper mHelper;
-    // Tab titles
-    private String[] tabs = { "Word List", "Flash Cards", "Quiz" };
-
-    public boolean getUpdateView() {
-        return mUpdateView;
-    }
-
-    public void setUpdateView(boolean iToUpdateView) {
-        this.mUpdateView = iToUpdateView;
-    }
+    boolean mUpdateView =false; // Boolean to control the update of view in cached Tabs
+    IabHelper mHelper;  // Billing Helper
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +72,17 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        final ActionBar actionBar = getActionBar();
-        // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setHomeButtonEnabled(false);
-
         initializeAppSettings();
-        // Initilization
+
         mAdapter = new TabsPagerAdapter(getFragmentManager(),this);
         mViewPager.setAdapter(mAdapter);
 
-        // Tab Navigation Select.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                final ActionBar.Tab aTab = tab;
-                // Tabs are to be updated.
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
                 setUpdateView(true);
                 if(aExpandButton!=null){
                     if(tab.getPosition()==0){
@@ -120,57 +99,17 @@ public class MainActivity extends FragmentActivity {
                     }
                 }
                 mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
-
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(tabListener));
-        }
+                handleRating();
 
 
-        // Tab Navigation Swipe
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-
-                actionBar.setSelectedNavigationItem(position);
-                if(aExpandButton!=null){
-                    if(position==0){
-                        aExpandButton.setVisible(true);
-                    }else{
-                        aExpandButton.setVisible(false);
-                    }
-                }
-                if(mResetButton!=null){
-                    if(!(position==0)){
-                        mResetButton.setVisible(true);
-                    }else{
-                        mResetButton.setVisible(false);
-                    }
-                }
-                // Tabs are to be updated.
-                setUpdateView(true);
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            public void onTabUnselected(TabLayout.Tab tab) {
             }
 
             @Override
-            public void onPageScrollStateChanged(int arg0) {
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
 
@@ -206,7 +145,6 @@ public class MainActivity extends FragmentActivity {
                 checkAppPurchase(false);
             }
         }
-
     }
 
     void checkAppPurchase(final Boolean iWithToast){
@@ -222,8 +160,6 @@ public class MainActivity extends FragmentActivity {
                                     getResources().getString(R.string.cannot_fetch_premium_status),
                                     Toast.LENGTH_LONG).show();
                         }
-
-
                         // Error. Show advertisements.
                         AdRequest adRequest = new AdRequest.Builder().build();
                         mAdView.loadAd(adRequest);
@@ -314,6 +250,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
@@ -391,48 +328,6 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
-            = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase)
-        {
-            if (result.isFailure()) {
-                Log.d("ABG", "Error purchasing: " + result);
-                Toast.makeText(getBaseContext(), "Exception", Toast.LENGTH_LONG).show();
-                return;
-            }
-            else if (purchase.getSku().equalsIgnoreCase("premium")) {
-                Log.d("ABG", "Purchase Done 1");
-                Toast.makeText(getBaseContext(), "Purchase Done", Toast.LENGTH_LONG).show();
-                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-                SharedPreferences.Editor aEditor = aSharedPref.edit();
-                aEditor.putString("is_app_purchased", "y");
-                aEditor.commit();
-                Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getPackageName());
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                return;
-            }else{
-                Log.d("ABG", "Purchase Done 2");
-                Toast.makeText(getBaseContext(), "Purchase Done", Toast.LENGTH_LONG).show();
-                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-                SharedPreferences.Editor aEditor = aSharedPref.edit();
-                aEditor.putString("is_app_purchased", "y");
-                aEditor.commit();
-                Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getPackageName());
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                return;
-            }
-        }
-    };
-
-    public void updateTabs(String iClassName){
-        mAdapter.setTabName(iClassName);
-        mAdapter.notifyDataSetChanged();
-    }
-
     private class ResetProgress extends AsyncTask<Void, Void, Void> {
         ProgressDialog dialog = new ProgressDialog(MainActivity.this);
         @Override
@@ -471,6 +366,48 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
+
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase)
+        {
+            if (result.isFailure()) {
+                Log.d("ABG", "Error purchasing: " + result);
+                Toast.makeText(getBaseContext(), "Error while purchasing.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if (purchase.getSku().equalsIgnoreCase("premium")) {
+                Toast.makeText(getBaseContext(), "Premium version activated.", Toast.LENGTH_LONG).show();
+                SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+                SharedPreferences.Editor aEditor = aSharedPref.edit();
+                aEditor.putString("is_app_purchased", "y");
+                aEditor.commit();
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage(getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                return;
+            }else{
+                Log.d("ABG", "Error purchasing: " + result);
+                Toast.makeText(getBaseContext(), "Error while purchasing.", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+    };
+
+    public boolean getUpdateView() {
+        return mUpdateView;
+    }
+
+    public void setUpdateView(boolean iToUpdateView) {
+        this.mUpdateView = iToUpdateView;
+    }
+
+    public void updateTabs(String iClassName){
+        mAdapter.setTabName(iClassName);
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     public void initializeAppSettings() {
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
@@ -515,7 +452,73 @@ public class MainActivity extends FragmentActivity {
         // If App is running for first time, set Reminder Time
         String aReminderTime = aSharedPref.getString("reminder_time", "");
         if(aReminderTime.equalsIgnoreCase("")){
-            setReminderTime("10:30 AM",10,30);
+            setReminderTime("10:30 AM", 10, 30);
+        }
+
+        // If App is running for first time, set Number of words mastered.
+        Integer aNumberOfWordsMastered = aSharedPref.getInt("number_words_mastered", 0);
+        if(aNumberOfWordsMastered == 0){
+            aEditor.putInt("number_words_mastered", 0);
+            aEditor.commit();
+        }
+
+        // If App is running for first time, set ask for rating
+        String aAskForRating = aSharedPref.getString("ask_rating", "");
+        if(aAskForRating.equalsIgnoreCase("")){
+            aEditor.putString("ask_rating", "y");
+            aEditor.commit();
+        }
+    }
+
+    void handleRating(){
+
+        final SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor aEditor = aSharedPref.edit();
+        String aAskForRating = aSharedPref.getString("ask_rating", "");
+        if(aAskForRating.equalsIgnoreCase("y")){
+            Integer aNumberOfWordsMastered = aSharedPref.getInt("number_words_mastered", 0);
+            if(aNumberOfWordsMastered > 25){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                View aRateDialogView = LayoutInflater.from(getBaseContext()).inflate(R.layout.dialog_rate_app,null);
+                builder.setView(aRateDialogView);
+
+                final AlertDialog alert = builder.create();
+                alert.show();
+
+                Button aYes = (Button) aRateDialogView.findViewById(R.id.bt_dra_yes);
+                aYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                        aEditor.putInt("number_words_mastered", 0);
+                        aEditor.commit();
+                        rateApplication();
+                    }
+                });
+
+                Button aLater = (Button) aRateDialogView.findViewById(R.id.bt_dra_later);
+                aLater.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                        aEditor.putInt("number_words_mastered", 0);
+                        aEditor.commit();
+                    }
+                });
+
+                Button aNever = (Button) aRateDialogView.findViewById(R.id.bt_dra_never);
+                aNever.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                        aEditor.putInt("number_words_mastered", 0);
+                        aEditor.putString("ask_rating", "n");
+                        aEditor.commit();
+                    }
+                });
+
+            }
         }
     }
 
@@ -563,7 +566,7 @@ public class MainActivity extends FragmentActivity {
         popup.setOutsideTouchable(true);
         popup.setFocusable(true);
         popup.setBackgroundDrawable(new ColorDrawable(0xFFF2F2F2));
-        popup.setElevation(8);
+        popup.setElevation(12);
         View aMenuView = findViewById(R.id.action_popup_menu);
         popup.showAsDropDown(aMenuView);
 
@@ -590,22 +593,27 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 popup.dismiss();
-                Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                // To count with Play market backstack, After pressing back button,
-                // to taken back to our application, we need to add following flags to intent.
-                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                }
+                rateApplication();
             }
         });
     }
+
+    void rateApplication(){
+        Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
+        }
+    }
+
 
     // Time-picker for Reminder.
     static public class TimePickerFragment extends DialogFragment

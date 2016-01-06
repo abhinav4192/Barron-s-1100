@@ -171,6 +171,15 @@ public class FlashCardsFragment extends Fragment{
 
         }else{
             // It means Word has been mastered
+            SharedPreferences aSharedPref = getActivity().getBaseContext().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+            SharedPreferences.Editor aEditor = aSharedPref.edit();
+
+            // Update Progress for rating app
+            Integer aNumberOfWordsMastered = aSharedPref.getInt("number_words_mastered", 0);
+            aNumberOfWordsMastered += 1;
+            aEditor.putInt("number_words_mastered", aNumberOfWordsMastered);
+            aEditor.commit();
+
             final Animation aOut = AnimationUtils.loadAnimation(getActivity().getBaseContext(),android.R.anim.fade_out);
             final Animation aIn = AnimationUtils.loadAnimation(getActivity().getBaseContext(),android.R.anim.fade_in);
             aIn.setDuration(700);
@@ -183,7 +192,7 @@ public class FlashCardsFragment extends Fragment{
                 }
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    mWordSelectionTextView.setBackgroundResource(R.color.colorOrangeDark);
+                    mWordSelectionTextView.setBackgroundResource(R.drawable.cust_rounded_orange);
                     mWordSelectionTextView.setText("Mastered Word: " + aWord);
                     mWordSelectionTextView.startAnimation(aIn);
                 }
@@ -200,7 +209,7 @@ public class FlashCardsFragment extends Fragment{
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    mWordSelectionTextView.setBackgroundResource(R.color.colorGreyDark);
+                    mWordSelectionTextView.setBackgroundResource(R.drawable.cust_rounder_grey);
                     mWordSelectionTextView.setText(mSetSelectorText);
                     flipCardToFront(true);
 

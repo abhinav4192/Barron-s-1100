@@ -24,7 +24,7 @@
             android:paddingLeft="8dp"
             android:text="Select List"
             android:layout_height="wrap_content"
-            android:background="#616161"
+            android:background="@drawable/cust_rounder_grey"
             android:textColor="#FFF"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_weight="7"
@@ -52,7 +52,7 @@
             android:paddingLeft="8dp"
             android:text="Sort List"
             android:layout_height="wrap_content"
-            android:background="#616161"
+            android:background="@drawable/cust_rounder_grey"
             android:textColor="#FFF"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_below="@+id/ll_word_selection"/>
@@ -112,7 +112,7 @@
             android:paddingLeft="8dp"
             android:text="Filter"
             android:layout_height="wrap_content"
-            android:background="#616161"
+            android:background="@drawable/cust_rounder_grey"
             android:textColor="#FFF"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_below="@+id/tv_as_shuffle"/>
@@ -193,7 +193,7 @@
             android:layout_height="35dp"
             android:text="Done"
             android:textColor="#FFF"
-            android:background="#00796B"
+            android:background="@drawable/cust_but_green"
             android:id="@+id/bt_as_done"
             android:layout_marginTop="18dp"
             android:layout_below="@+id/tv_as_all_words"/>

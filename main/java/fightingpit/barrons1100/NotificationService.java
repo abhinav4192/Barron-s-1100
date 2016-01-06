@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
 
@@ -33,6 +34,7 @@ public class NotificationService extends IntentService {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.small_b)
+                            .setColor(Color.parseColor("#009688"))
                             .setLargeIcon(largeIcon)
                             .setContentTitle("Barron's 1100")
                             .setContentText("Time to learn new words !!")

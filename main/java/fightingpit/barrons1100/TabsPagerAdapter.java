@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     private String mTabName = new String();
+    private String tabTitles[] = new String[] { "Word List", "Flash Cards", "Quiz" };
     private Integer mPrimaryItemId = 0;
     private Context mContext;
 
@@ -75,5 +76,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             ((MainActivity) mContext).setUpdateView(false);
             ((MainActivity) mContext).updateTabs("QuizFragment");
         }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        // Generate title based on item position
+        return tabTitles[position];
     }
 }
