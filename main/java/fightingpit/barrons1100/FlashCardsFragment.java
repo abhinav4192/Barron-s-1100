@@ -45,9 +45,6 @@ public class FlashCardsFragment extends Fragment{
 
         View rootView = inflater.inflate(R.layout.flash_cards_fragment, container, false);
         ButterKnife.bind(this, rootView);
-
-        mCorrect.setVisibility(View.GONE);
-        mWrong.setVisibility(View.GONE);
         mSetSelectorText = new String();
         return rootView;
     }
@@ -55,6 +52,11 @@ public class FlashCardsFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+
+        mCorrect.setVisibility(View.GONE);
+        mWrong.setVisibility(View.GONE);
+        mShowMeaning.setVisibility(View.VISIBLE);
+
         // Getting Desired WordList
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aFilerPref = aSharedPref.getString("filter_pref", "");
@@ -92,7 +94,7 @@ public class FlashCardsFragment extends Fragment{
             aFrontFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fl_fcf_cardView_holder, aFrontFragment)
+                    .replace(R.id.fl_fcf_cardView_holder, aFrontFragment)
                     .commit();
 
             mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
@@ -105,7 +107,7 @@ public class FlashCardsFragment extends Fragment{
             aBlankFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fl_fcf_cardView_holder,aBlankFragment)
+                    .replace(R.id.fl_fcf_cardView_holder,aBlankFragment)
                     .commit();
             mProgressBar.setVisibility(View.GONE);
         }else{
@@ -116,7 +118,7 @@ public class FlashCardsFragment extends Fragment{
             aBlankFragment.setArguments(bundle);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fl_fcf_cardView_holder,aBlankFragment)
+                    .replace(R.id.fl_fcf_cardView_holder,aBlankFragment)
                     .commit();
             mProgressBar.setVisibility(View.GONE);
         }

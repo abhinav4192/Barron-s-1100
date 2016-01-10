@@ -72,7 +72,7 @@ public class WordListFragment extends Fragment {
             mMeaningList.add(aWordInfo.getMeaning());
         }
         // Putting data in List View.
-        mAdapterExpandableWordList = new AdapterExpandableWordList(context,mWordList, mMeaningList);
+        mAdapterExpandableWordList = new AdapterExpandableWordList(mWordList, mMeaningList);
         mAdapterExpandableWordList
                 .setInflater(
                         (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE),

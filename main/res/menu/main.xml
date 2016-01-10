@@ -1,10 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:id="@+id/action_settings"
-    android:title="Settings"
+    android:title="Configuration"
     android:icon="@drawable/ic_settings_white"
     android:showAsAction="always"
     android:orderInCategory="3"/>
-
 <item android:id="@+id/action_exp_cont"
     android:title="Expand/Contract"
     android:icon="@drawable/ic_expand_list"
@@ -16,8 +15,9 @@
         android:showAsAction="always"
         android:orderInCategory="2" />
 <item android:id="@+id/action_popup_menu"
-        android:title="T"
+        android:title="Settings"
         android:showAsAction="always"
+    android:icon="@drawable/dots"
         android:orderInCategory="4" />
 
 

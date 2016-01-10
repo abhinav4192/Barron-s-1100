@@ -15,17 +15,15 @@ import android.widget.TextView;
 
 public class AdapterExpandableWordList extends BaseExpandableListAdapter {
 
-    public List<GenericContainer> WordList ;
-    public String aTempChild;
-    public ArrayList<String> ChildList = new ArrayList<>();
-    public LayoutInflater inflater;
-    public Activity activity;
-    private Context context;
+    private List<GenericContainer> WordList ;
+    private String aTempChild;
+    private ArrayList<String> ChildList = new ArrayList<>();
+    private LayoutInflater inflater;
+    private Activity activity;
 
-    public AdapterExpandableWordList(Context iContext, List<GenericContainer> iWordList, ArrayList<String> iMeaningList) {
+    public AdapterExpandableWordList(List<GenericContainer> iWordList, ArrayList<String> iMeaningList) {
         WordList = iWordList;
         this.ChildList = iMeaningList;
-        this.context = iContext;
     }
 
     public void setInflater(LayoutInflater inflater, Activity act) {
@@ -66,7 +64,6 @@ public class AdapterExpandableWordList extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int wordPosition) {
-        //return ((ArrayList<String>) ChildList.get(wordPosition)).size();
         return 1;
     }
 

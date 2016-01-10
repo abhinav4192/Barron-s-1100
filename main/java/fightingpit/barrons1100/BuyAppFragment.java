@@ -26,11 +26,6 @@ public class BuyAppFragment extends Fragment {
     IabHelper mHelper;
     String TAG = "ABG";
 
-    public static BuyAppFragment newInstance() {
-        BuyAppFragment fragment = new BuyAppFragment();
-        return fragment;
-    }
-
     public BuyAppFragment() {
         // Required empty public constructor
     }
@@ -93,7 +88,6 @@ public class BuyAppFragment extends Fragment {
             try {
                 if (result.isFailure()) {
                     Log.d(TAG, "Error purchasing: " + result);
-                    return;
                 } else if (purchase.getSku().equalsIgnoreCase("premium")) {
                     Log.d(TAG, "Purchase Finished");
                     SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
@@ -105,7 +99,6 @@ public class BuyAppFragment extends Fragment {
                             .getLaunchIntentForPackage(getActivity().getPackageName());
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                    return;
                 }
         }catch (Exception e){
                 Log.d(TAG, "Exception Caught :" + e);

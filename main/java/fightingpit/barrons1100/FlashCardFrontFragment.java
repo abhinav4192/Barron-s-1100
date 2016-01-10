@@ -9,11 +9,6 @@ import android.widget.TextView;
 
 public class FlashCardFrontFragment extends Fragment {
 
-    public static FlashCardFrontFragment newInstance() {
-        FlashCardFrontFragment fragment = new FlashCardFrontFragment();
-        return fragment;
-    }
-
     public FlashCardFrontFragment() {
         // Required empty public constructor
     }

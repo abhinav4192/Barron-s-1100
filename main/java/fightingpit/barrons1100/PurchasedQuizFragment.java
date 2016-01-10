@@ -54,11 +54,6 @@ public class PurchasedQuizFragment extends Fragment {
     private Random mRandomGenerator;
     private List<GenericContainer> mAllWordsListFromDb;
 
-    public static PurchasedQuizFragment newInstance() {
-        PurchasedQuizFragment fragment = new PurchasedQuizFragment();
-        return fragment;
-    }
-
     public PurchasedQuizFragment() {
         // Required empty public constructor
     }

@@ -1,5 +1,6 @@
 package fightingpit.barrons1100;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -28,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -65,6 +68,7 @@ public class MainActivity extends Activity {
     public Context context;
     boolean mUpdateView =false; // Boolean to control the update of view in cached Tabs
     IabHelper mHelper;  // Billing Helper
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -374,7 +378,6 @@ public class MainActivity extends Activity {
             if (result.isFailure()) {
                 Log.d("ABG", "Error purchasing: " + result);
                 Toast.makeText(getBaseContext(), "Error while purchasing.", Toast.LENGTH_LONG).show();
-                return;
             }
             else if (purchase.getSku().equalsIgnoreCase("premium")) {
                 Toast.makeText(getBaseContext(), "Premium version activated.", Toast.LENGTH_LONG).show();
@@ -386,11 +389,9 @@ public class MainActivity extends Activity {
                         .getLaunchIntentForPackage(getPackageName());
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
-                return;
             }else{
                 Log.d("ABG", "Error purchasing: " + result);
                 Toast.makeText(getBaseContext(), "Error while purchasing.", Toast.LENGTH_LONG).show();
-                return;
             }
         }
     };
@@ -522,11 +523,12 @@ public class MainActivity extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void handlePopupMenu(){
 
         // Inflate a new popup.
         final PopupWindow popup = new PopupWindow(getBaseContext());
-        View aPopUpView = getLayoutInflater().inflate(R.layout.popup_reminder, null);
+        final View aPopUpView = getLayoutInflater().inflate(R.layout.popup_reminder, null);
 
         // Get Resources from View
         TextView aRateApp = (TextView) aPopUpView.findViewById(R.id.tv_pr_rate_app);
@@ -596,6 +598,24 @@ public class MainActivity extends Activity {
                 rateApplication();
             }
         });
+
+        TextView aHelp = (TextView) aPopUpView.findViewById(R.id.tv_pr_help);
+        aHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
+                View aRateDialogView = LayoutInflater.from(getBaseContext()).inflate(R.layout.help_layout, null);
+                builder.setView(aRateDialogView);
+                final AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+    }
+
+    Context getActivityContext()
+    {
+        return this;
     }
 
     void rateApplication(){

@@ -19,11 +19,6 @@ public class FlashCardBackFragment extends Fragment {
     @Bind(R.id.iv_fcb_fav) ImageView mFav;
 
 
-    public static FlashCardFrontFragment newInstance() {
-        FlashCardFrontFragment fragment = new FlashCardFrontFragment();
-        return fragment;
-    }
-
     public FlashCardBackFragment() {
         // Required empty public constructor
     }

@@ -10,12 +10,6 @@ import android.widget.TextView;
 
 public class BlankFragment extends Fragment {
 
-    // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance() {
-        BlankFragment fragment = new BlankFragment();
-        return fragment;
-    }
-
     public BlankFragment() {
         // Required empty public constructor
     }
