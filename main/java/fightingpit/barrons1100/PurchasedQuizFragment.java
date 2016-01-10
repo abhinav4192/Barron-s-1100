@@ -115,6 +115,10 @@ public class PurchasedQuizFragment extends Fragment {
     }
 
     public void populateRadioGroup(){
+        for(int i=0; i< mRadioGroup.getChildCount(); i++)
+        {
+            mRadioGroup.getChildAt(i).setEnabled(true);
+        }
         if(mWordList.size()>0){
             // Populate Word and Meanings in Radio Group
             mProgressBar.setMax(mWordListFromDb.size() * getResources().getInteger(R.integer.max_progress_val));
@@ -200,6 +204,10 @@ public class PurchasedQuizFragment extends Fragment {
     }
 
     @OnClick(R.id.bt_qpf_check) void onCheckClicked() {
+        for(int i=0; i< mRadioGroup.getChildCount(); i++)
+        {
+            mRadioGroup.getChildAt(i).setEnabled(false);
+        }
         int id = mRadioGroup.getCheckedRadioButtonId();
         if (id == -1){
             Toast.makeText(getActivity().getBaseContext(),"No option selected",Toast.LENGTH_LONG).show();
@@ -354,6 +362,10 @@ public class PurchasedQuizFragment extends Fragment {
 
     @OnClick(R.id.bt_qpf_next) void onNextWordClicked() {
 
+        for(int i=0; i< mRadioGroup.getChildCount(); i++)
+        {
+            mRadioGroup.getChildAt(i).setEnabled(true);
+        }
         final Animation aOut = AnimationUtils.loadAnimation(getActivity().getBaseContext(), android.R.anim.fade_out);
         final Animation aIn = AnimationUtils.loadAnimation(getActivity().getBaseContext(),android.R.anim.fade_in);
         aOut.setAnimationListener(new Animation.AnimationListener() {
