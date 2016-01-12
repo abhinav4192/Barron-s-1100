@@ -347,11 +347,11 @@ public class MainActivity extends Activity {
             List<GenericContainer> mWordListFromDb = new ArrayList<>();
             final DatabaseHelper aDBHelper = new DatabaseHelper(context);
             if(aFilerPref.equalsIgnoreCase("all") || aFilerPref.equalsIgnoreCase("")){
-                mWordListFromDb = aDBHelper.getWordList("a");
+                mWordListFromDb = aDBHelper.resetWordList("a");
             } else if(aFilerPref.matches("[A-Z]")){
-                mWordListFromDb = aDBHelper.getWordListByAlphabet(aFilerPref,"a");
+                mWordListFromDb = aDBHelper.resetWordListByAlphabet(aFilerPref, "a");
             }else if (aFilerPref.matches("[0123456789]{1,2}")){
-                mWordListFromDb = aDBHelper.getWordListBySet(String.valueOf(Integer.parseInt(aFilerPref)), "a");
+                mWordListFromDb = aDBHelper.resetWordListBySet(String.valueOf(Integer.parseInt(aFilerPref)), "a");
             }
             aDBHelper.close();
             for (GenericContainer aWordInfo : mWordListFromDb) {
