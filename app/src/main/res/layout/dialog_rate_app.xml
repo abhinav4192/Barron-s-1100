@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#E0E4CC">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/question_rate_app"
+        android:id="@+id/tv_dra_question_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:minWidth="250dp"
+        android:layout_height="wrap_content"
+        android:text="Sure, I'll rate"
+        android:id="@+id/bt_dra_yes"
+        android:layout_below="@+id/tv_dra_question_text"
+        android:layout_alignLeft="@+id/tv_dra_question_text"
+        android:layout_alignStart="@+id/tv_dra_question_text"
+        android:layout_alignRight="@+id/tv_dra_question_text"
+        android:layout_alignEnd="@+id/tv_dra_question_text"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/cust_but_green"
+        android:textColor="#FFF"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/bt_dra_yes"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout"
+        android:layout_alignLeft="@+id/tv_dra_question_text"
+        android:layout_alignStart="@+id/tv_dra_question_text"
+        android:layout_alignRight="@+id/tv_dra_question_text"
+        android:layout_alignEnd="@+id/tv_dra_question_text">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:minWidth="100dp"
+            android:layout_height="wrap_content"
+            android:text="Later"
+            android:id="@+id/bt_dra_later"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/cust_but_gold"
+            android:textColor="#FFF"/>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:text="Never"
+            android:id="@+id/bt_dra_never"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/cust_but_red"
+            android:textColor="#FFF"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

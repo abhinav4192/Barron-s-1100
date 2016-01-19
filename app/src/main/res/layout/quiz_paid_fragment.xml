@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_qpf_word_selection"
+            android:layout_width="match_parent"
+            android:layout_marginTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:text="Learning Set 09"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cust_rounder_grey"
+            android:textColor="#FFF"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_weight="7"
+            android:layout_marginBottom="16dp"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:id="@+id/pb_qpf_set_progress"
+            android:layout_below="@+id/tv_qpf_word_selection"
+            android:layout_alignLeft="@+id/tv_qpf_word_selection"
+            android:layout_alignStart="@+id/tv_qpf_word_selection"
+            android:layout_alignRight="@+id/tv_qpf_word_selection"
+            android:layout_alignEnd="@+id/tv_qpf_word_selection"
+            android:progress="67"
+            android:layout_height="4dp"
+            android:progressDrawable="@drawable/custom_progressbar"/>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_qpf_cardView"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="4dp"
+            android:background="#B2DFDB"
+            android:layout_below="@+id/pb_qpf_set_progress"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rl_qpf_word_and_fav">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Medium Text"
+                        android:id="@+id/tv_qpf_word"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingRight="72dp"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:id="@+id/iv_qpf_fav"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="8dp"
+                        android:paddingLeft="12dp"
+                        android:src="@drawable/ic_star_outline_black_18dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="16dp"/>
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:id="@+id/rg_qpf_radio_group">
+                    <RadioButton android:id="@+id/rb_qpf_option1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="paying for goods or services or to recompense for losses"/>
+                    <RadioButton android:id="@+id/rb_qpf_option2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="a person who joins with another in carrying out some plan"/>
+                    <RadioButton android:id="@+id/rb_qpf_option3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="a slender upright spire at the top of a buttress of tower"/>
+                    <RadioButton android:id="@+id/rb_qpf_option4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="state of uncertainty in a choice between unfavorable options"/>
+                </RadioGroup>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_qpf_noWordView"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            card_view:cardCornerRadius="4dp"
+            android:background="#B2DFDB"
+            android:layout_below="@+id/cv_qpf_cardView"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="No word match the selected criteria. Change criteria."
+                android:padding="8dp"
+                android:id="@+id/tv_qpf_no_word"/>
+        </android.support.v7.widget.CardView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Check"
+            android:layout_marginTop="8dp"
+            android:id="@+id/bt_qpf_check"
+            android:background="@drawable/cust_but_green"
+            android:textColor="#FFF"
+            android:layout_below="@+id/cv_qpf_noWordView"
+            android:layout_alignLeft="@+id/cv_qpf_cardView"
+            android:layout_alignStart="@+id/cv_qpf_cardView"
+            android:layout_alignRight="@+id/cv_qpf_cardView"
+            android:layout_alignEnd="@+id/cv_qpf_cardView" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Next Word"
+            android:layout_marginTop="8dp"
+            android:id="@+id/bt_qpf_next"
+            android:background="@drawable/cust_rounder_grey"
+            android:textColor="#FFF"
+            android:layout_below="@+id/cv_qpf_noWordView"
+            android:layout_alignLeft="@+id/cv_qpf_cardView"
+            android:layout_alignStart="@+id/cv_qpf_cardView"
+            android:layout_alignRight="@+id/cv_qpf_cardView"
+            android:layout_alignEnd="@+id/cv_qpf_cardView" />
+    </RelativeLayout>
+
+</ScrollView>

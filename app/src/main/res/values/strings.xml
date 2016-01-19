@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Barron\'s 1100</string>
+    <string name="banner_ad_unit_id"> ca-app-pub-7750967006737997/4783167060</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="base64EncodedPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAocojvayj32cV4tjBRWM2fa7zPrgYvBYoaAqfcZAcDrFgtFLNTF630HqJq2aFPqlauqTNTf1MYCjLzJwm4NDTDS8ludtzj/81yaSX7A9cShE+tX/nhkUwOmWeSLnFEa+wazhWRmDPBe2DOEcYTA8QVI2YRGaoW7yx0seeUB721gwEmjyQhGyJGzGa8Qx2+7nyYsy6T9T3V9fHFvEn5PmNtF8aexUMx5Z4VITs1PzfcLbVGdeBCqi3MUXeTLGEiXyxwPWvuPYUC8TmDHDyBN/SQCwvHTKPJt2WddPTT0e6nzEI6wn73GasDSHWB+at6+iQYyoAiznhPKUNpbRP+Vr2fwIDAQAB</string>
+    <string name="no_words">No word match the selected criteria. Change criteria.</string>
+    <string name="all_words_mastered">All words mastered in selected criteria. Reset progress or change criteria.</string>
+    <string name="prob_inApp_billing">Problem setting up In-app Billing: </string>
+    <string name="cannot_fetch_premium_status">Cannot fetch premium status. Connect to internet and restart application.</string>
+    <string name="question_rate_app">Now that you have mastered quite a few words, would you like to rate Barron\'s 1100 ?</string>
+    <string name="help_text"><b>How to use the application to learn word meanings effectively ?</b>\n\nStart by selecting a particular Set or Alphabet. Have a look at Words and Meanings from Word Lists a few times. When you feel confident that you know the meaning of most of the words, move to Flash Cards.\n\nFlash Cards will challenge you more, as now you will have to guess the meaning. Keep going through Flash Cards till you have mastered all of the words. \n\nStart another Set or Alphabet now and do all of the above mentioned steps. \n\nA few days later go back to Set/Alphabet for which you previously mastered the flash cards list. Reset the progress of this Set and try Quizzes now. Quizzes will be even more difficult, as this time you will have to select correct meaning from four confusing meaning. Proceed with the quizzes till you have mastered all words. At this point you can be sure that you have learned almost all the meaning effectively. \n\n* If you find a word with meaning too difficult to remember, favorite that word. Later, to avoid wasting time on already learned words, you can change the settings to see only favorite words and use flash cards and quizzes to learn only these words.</string>
+
+</resources>
