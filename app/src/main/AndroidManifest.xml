@@ -3,6 +3,7 @@
     package="fightingpit.barrons1100" >
 
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,13 @@
             android:name=".NotificationService"
             android:exported="false" >
         </service>
+
+        <receiver android:name=".SetReminderAfterBootService"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

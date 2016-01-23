@@ -11,10 +11,12 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -104,8 +106,6 @@ public class MainActivity extends Activity {
                 }
                 mViewPager.setCurrentItem(tab.getPosition());
                 handleRating();
-
-
             }
 
             @Override
@@ -685,6 +685,14 @@ public class MainActivity extends Activity {
         Intent myIntent = new Intent(this , NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
         alarmMgr.cancel(pendingIntent);
+
+        // Disable resetting reminder after boot.
+        ComponentName receiver = new ComponentName(context, SetReminderAfterBootService.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     // Set Reminder Time and Notification
@@ -714,5 +722,14 @@ public class MainActivity extends Activity {
         alarmMgr.cancel(pendingIntent);
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
+        // Enable resetting reminder after boot.
+        ComponentName receiver = new ComponentName(context, SetReminderAfterBootService.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 }
