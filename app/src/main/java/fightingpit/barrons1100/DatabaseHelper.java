@@ -366,45 +366,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<GenericContainer> resetWordList(String iFavSelector){
+    public List<GenericContainer> resetWordList(){
         SQLiteDatabase db = getReadableDatabase();
 
         String selection = DatabaseContract.WordListDB.PROGRESS + "!=?";
+        String[] columns = { DatabaseContract.WordListDB.WORD};
         String[] selectionArgs = {String.valueOf(DB_CONTEXT.getResources().getInteger(R.integer.max_progress_val))};
-        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
         List<GenericContainer> aReturnList = new ArrayList<>();
         c.moveToFirst();
         while(!c.isAfterLast()){
             GenericContainer aContainer = new GenericContainer();
-
-            if(iFavSelector.equalsIgnoreCase("a")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                }else {
-                    aContainer.setFavourite(false);
-                }
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                aReturnList.add(aContainer);
-
-            }else if (iFavSelector.equalsIgnoreCase("m")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                    aReturnList.add(aContainer);
-                }
-            }else if (iFavSelector.equalsIgnoreCase("u")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
-                    aContainer.setFavourite(false);
-                    aReturnList.add(aContainer);
-                }
-            }
+            aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
+            aReturnList.add(aContainer);
             c.moveToNext();
         }
         c.close();
@@ -412,46 +386,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return aReturnList;
     }
 
-    public List<GenericContainer> resetWordListByAlphabet(String iAlphabet, String iFavSelector){
+    public List<GenericContainer> resetWordListByAlphabet(String iAlphabet){
         SQLiteDatabase db = getReadableDatabase();
 
         String selection = DatabaseContract.WordListDB.WORD + " like ? and " + DatabaseContract.WordListDB.PROGRESS + "!=?";
+        String[] columns = { DatabaseContract.WordListDB.WORD};
         String[] selectionArgs = {iAlphabet + "%", String.valueOf(DB_CONTEXT.getResources().getInteger(R.integer.max_progress_val))};
-        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
 
         List<GenericContainer> aReturnList = new ArrayList<>();
         c.moveToFirst();
         while(!c.isAfterLast()){
             GenericContainer aContainer = new GenericContainer();
-
-            if(iFavSelector.equalsIgnoreCase("a")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                }else {
-                    aContainer.setFavourite(false);
-                }
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                aReturnList.add(aContainer);
-
-            }else if (iFavSelector.equalsIgnoreCase("m")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                    aReturnList.add(aContainer);
-                }
-            }else if (iFavSelector.equalsIgnoreCase("u")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
-                    aContainer.setFavourite(false);
-                    aReturnList.add(aContainer);
-                }
-            }
+            aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
+            aReturnList.add(aContainer);
             c.moveToNext();
         }
         c.close();
@@ -459,45 +407,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return aReturnList;
     }
 
-    public List<GenericContainer> resetWordListBySet(String iSetNumber, String iFavSelector){
+    public List<GenericContainer> resetWordListBySet(String iSetNumber){
         SQLiteDatabase db = getReadableDatabase();
+        String[] columns = { DatabaseContract.WordListDB.WORD};
         String selection = DatabaseContract.WordListDB.SET_NUMBER + "=? and " + DatabaseContract.WordListDB.PROGRESS + "!=?";
         String[] selectionArgs = {iSetNumber, String.valueOf(DB_CONTEXT.getResources().getInteger(R.integer.max_progress_val))};
-        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        Cursor c = db.query(DatabaseContract.WordListDB.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
 
         List<GenericContainer> aReturnList = new ArrayList<>();
         c.moveToFirst();
         while(!c.isAfterLast()){
             GenericContainer aContainer = new GenericContainer();
-
-            if(iFavSelector.equalsIgnoreCase("a")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                }else {
-                    aContainer.setFavourite(false);
-                }
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                aReturnList.add(aContainer);
-
-            }else if (iFavSelector.equalsIgnoreCase("m")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
-                    aContainer.setFavourite(true);
-                    aReturnList.add(aContainer);
-                }
-            }else if (iFavSelector.equalsIgnoreCase("u")){
-                aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
-                aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
-                aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
-                if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
-                    aContainer.setFavourite(false);
-                    aReturnList.add(aContainer);
-                }
-            }
+            aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
+            aReturnList.add(aContainer);
             c.moveToNext();
         }
         c.close();
