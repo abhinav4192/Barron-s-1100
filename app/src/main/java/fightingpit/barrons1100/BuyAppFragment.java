@@ -76,6 +76,9 @@ public class BuyAppFragment extends Fragment {
                             " Activate internet, restart application and try again.", Toast.LENGTH_LONG).show();
                 }
 
+                // Update tracker for insights
+                MainActivity.updatebuttonHitTracker(getResources().getString(R.string.but_buy));
+
             }
         });
         return rootView;

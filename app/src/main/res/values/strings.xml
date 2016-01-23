@@ -10,5 +10,8 @@
     <string name="cannot_fetch_premium_status">Cannot fetch premium status. Connect to internet and restart application.</string>
     <string name="question_rate_app">Now that you have mastered quite a few words, would you like to rate Barron\'s 1100 ?</string>
     <string name="help_text"><b>How to use the application to learn word meanings effectively ?</b>\n\nStart by selecting a particular Set or Alphabet. Have a look at Words and Meanings from Word Lists a few times. When you feel confident that you know the meaning of most of the words, move to Flash Cards.\n\nFlash Cards will challenge you more, as now you will have to guess the meaning. Keep going through Flash Cards till you have mastered all of the words. \n\nStart another Set or Alphabet now and do all of the above mentioned steps. \n\nA few days later go back to Set/Alphabet for which you previously mastered the flash cards list. Reset the progress of this Set and try Quizzes now. Quizzes will be even more difficult, as this time you will have to select correct meaning from four confusing meaning. Proceed with the quizzes till you have mastered all words. At this point you can be sure that you have learned almost all the meaning effectively. \n\n* If you find a word with meaning too difficult to remember, favorite that word. Later, to avoid wasting time on already learned words, you can change the settings to see only favorite words and use flash cards and quizzes to learn only these words.</string>
-
+    <string name="tracker_word_list">Word List</string>
+    <string name="tracker_flash_cards">Flash Card</string>
+    <string name="tracker_quiz">Quiz</string>
+    <string name="but_buy">Buy Button</string>
 </resources>

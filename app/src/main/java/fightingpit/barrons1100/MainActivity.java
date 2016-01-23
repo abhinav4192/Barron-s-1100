@@ -46,6 +46,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,6 +72,7 @@ public class MainActivity extends Activity {
     public Context context;
     boolean mUpdateView =false; // Boolean to control the update of view in cached Tabs
     IabHelper mHelper;  // Billing Helper
+    private static Tracker mTracker;
 
 
     @Override
@@ -79,6 +82,10 @@ public class MainActivity extends Activity {
         ButterKnife.bind(this);
 
         initializeAppSettings();
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        updateTracker(getResources().getString(R.string.tracker_word_list));
 
         mAdapter = new TabsPagerAdapter(getFragmentManager(),this);
         mViewPager.setAdapter(mAdapter);
@@ -106,6 +113,13 @@ public class MainActivity extends Activity {
                 }
                 mViewPager.setCurrentItem(tab.getPosition());
                 handleRating();
+                if(tab.getPosition()==0){
+                    updateTracker(getResources().getString(R.string.tracker_word_list));
+                } else if (tab.getPosition()==1){
+                    updateTracker(getResources().getString(R.string.tracker_flash_cards));
+                } else {
+                    updateTracker(getResources().getString(R.string.tracker_quiz));
+                }
             }
 
             @Override
@@ -731,5 +745,26 @@ public class MainActivity extends Activity {
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
+    }
+
+    /**
+     * Method to update analytics tracker.
+     * This will update analytics with the screen user is viewing.
+     * @param iScreenName Id of screen currently active
+     */
+    public static void updateTracker(String iScreenName){
+        mTracker.setScreenName(iScreenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    /**
+     * Update Events in tracker
+     * @param iButtonName Id of the button clicked
+     */
+    public static void updatebuttonHitTracker(String iButtonName){
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction(iButtonName)
+                .build());
     }
 }
