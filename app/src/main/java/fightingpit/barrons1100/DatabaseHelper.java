@@ -1,10 +1,13 @@
 package fightingpit.barrons1100;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -26,8 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DatabaseContract.DATABASE_NAME, null, DatabaseContract.DATABASE_VERSION);
         DB_CONTEXT = context;
     }
-
-
 
     // Method is called during creation of the database
     @Override
@@ -61,10 +62,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Method is called during an upgrade of the database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for(int i=0; i < DatabaseContract.SQL_DROP_TABLE_ARRAY.length; i++) {
-            db.execSQL(DatabaseContract.SQL_DROP_TABLE_ARRAY[i]);
+        Log.d("DBU", "onUpgrade called");
+
+        if(oldVersion==1) {
+            try {
+                for (int i = 0; i < DatabaseContract.SQL_UPDATE_TABLE_ARRAY.length; i++) {
+                    db.execSQL(DatabaseContract.SQL_UPDATE_TABLE_ARRAY[i]);
+                }
+            } catch (Exception e) {
+                Log.d("DBU", "DB Table Structure update failed:" + e.toString());
+            }
         }
-        onCreate(db);
+
+        // Inserting Data into table
+        InputStream aInitQuery = DB_CONTEXT.getResources().openRawResource(R.raw.barrons_db_update);
+        BufferedReader aInsertReader = new BufferedReader(new InputStreamReader(aInitQuery));
+
+        // Iterate through lines (assuming each update has its own line and there is no other stuff)
+        try {
+            while (aInsertReader.ready()) {
+                String aUpdateStatement = aInsertReader.readLine();
+                db.execSQL(aUpdateStatement);
+            }
+            aInsertReader.close();
+        }
+        catch(Exception e)
+        {
+            Log.d("DBU", "DB table Data update failed:"+ e.toString());
+        }
     }
 
     public Integer getCountByAlphabet(String iAlphabet,String iFavSelector){
@@ -157,6 +182,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(iFavSelector.equalsIgnoreCase("a")){
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
                 }else {
@@ -169,6 +195,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
                     aReturnList.add(aContainer);
@@ -177,6 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
                     aContainer.setFavourite(false);
                     aReturnList.add(aContainer);
@@ -204,6 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(iFavSelector.equalsIgnoreCase("a")){
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
                 }else {
@@ -215,6 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }else if (iFavSelector.equalsIgnoreCase("m")){
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
@@ -223,6 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }else if (iFavSelector.equalsIgnoreCase("u")){
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
                 if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
                     aContainer.setFavourite(false);
@@ -250,6 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(iFavSelector.equalsIgnoreCase("a")){
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
                 }else {
@@ -262,6 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1){
                     aContainer.setFavourite(true);
                     aReturnList.add(aContainer);
@@ -270,6 +303,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 aContainer.setWord(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.WORD)));
                 aContainer.setMeaning(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.MEANING)));
                 aContainer.setProgress(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.PROGRESS)));
+                aContainer.setSentence(c.getString(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.SENTENCE)));
                 if(!(c.getInt(c.getColumnIndexOrThrow(DatabaseContract.WordListDB.FAVOURITE))==1)){
                     aContainer.setFavourite(false);
                     aReturnList.add(aContainer);

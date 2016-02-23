@@ -7,22 +7,20 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
+        android:minHeight="160dp"
         card_view:cardCornerRadius="4dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="24dp"
         android:background="#B2DFDB"
         android:layout_margin="8dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="160dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:id="@+id/rl_fcb_word_image"
                 android:layout_alignTop="@+id/card_view"
                 android:layout_alignLeft="@+id/card_view"
@@ -31,10 +29,10 @@
                 android:layout_alignEnd="@+id/card_view">
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="40dp"
                     android:paddingLeft="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     android:paddingRight="72dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
@@ -45,9 +43,11 @@
                 <ImageView
                     android:id="@+id/iv_fcb_fav"
                     android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:padding="8dp"
-                    android:paddingLeft="12dp"
+                    android:layout_height="40dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingRight="8dp"
                     android:src="@drawable/ic_star_outline_black_18dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
@@ -64,17 +64,33 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="striking change in appearance or character or circumstances"
             android:id="@+id/tv_fcb_meaning"
+            android:textSize="18sp"
             android:layout_alignLeft="@+id/card_view"
             android:layout_alignStart="@+id/card_view"
             android:layout_alignRight="@+id/card_view"
             android:layout_alignEnd="@+id/card_view"
             android:paddingLeft="12dp"
             android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:text="Large Text sentence. This is sentence with large number of words."
+            android:id="@+id/tv_fcb_sen"
+            android:layout_alignLeft="@+id/card_view"
+            android:layout_alignStart="@+id/card_view"
+            android:layout_alignRight="@+id/card_view"
+            android:layout_alignEnd="@+id/card_view"
+            android:paddingLeft="12dp"
+            android:paddingTop="0dp"
             android:paddingBottom="8dp"
             android:paddingRight="8dp"/>
         </LinearLayout>

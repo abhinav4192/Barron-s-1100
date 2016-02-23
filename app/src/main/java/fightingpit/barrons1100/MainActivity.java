@@ -24,21 +24,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -79,8 +75,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
+        context = getBaseContext();
+        ButterKnife.bind(this);
         initializeAppSettings();
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
@@ -131,7 +128,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        context = getBaseContext();
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
         if(aIsAppPurchased.equals("")){
@@ -143,25 +139,16 @@ public class MainActivity extends Activity {
                 // If user has purchased the app.
                 // Hide advertisement.
                 mAdView.setVisibility(View.GONE);
-                // Make Layout Full Screen
-                int sizeInDP = 8;
-                int marginInDp = (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
-                                .getDisplayMetrics());
-                RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
-                        CardView.LayoutParams.MATCH_PARENT);
-                aCVParams.setMargins(0, 0, 0, marginInDp);
-                mViewPager.setLayoutParams(aCVParams);
             }else{
                 // Loading the Advertisement.
                 AdRequest adRequest = new AdRequest.Builder().build();
                 mAdView.loadAd(adRequest);
-                /**
-                 * App is not running for first time, (just to be sure)check if app has been purchased or not.
-                 * If user cancels order, this will reset the shared pref, thus making quiz option unavailable.
-                 */
-                checkAppPurchase(false);
             }
+            /**
+             * App is not running for first time, (just to be sure)check if app has been purchased or not.
+             * If user cancels order, this will reset the shared pref, thus making quiz option unavailable.
+             */
+            checkAppPurchase(false);
         }
     }
 
@@ -225,15 +212,6 @@ public class MainActivity extends Activity {
                     // User has purchased the app.
                     // Hide advertisement.
                     mAdView.setVisibility(View.GONE);
-                    // Make Layout Full Screen
-                    int sizeInDP = 8;
-                    int marginInDp = (int) TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
-                                    .getDisplayMetrics());
-                    RelativeLayout.LayoutParams aCVParams = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
-                            CardView.LayoutParams.MATCH_PARENT);
-                    aCVParams.setMargins(0, 0, 0, marginInDp);
-                    mViewPager.setLayoutParams(aCVParams);
                 }else{
                     Log.d("ABG", "Not Purchased");
                     aEditor.putString("is_app_purchased", "n");
@@ -428,6 +406,10 @@ public class MainActivity extends Activity {
         SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor aEditor = aSharedPref.edit();
 
+        // Set Rating Preference for session
+        aEditor.putString("this_session_asked_rating", "n");
+        aEditor.commit();
+
         // If App is running for first time, set list Preference
         String aListViewPref = aSharedPref.getString("list_view_pref", "");
         if(aListViewPref.equalsIgnoreCase("")){
@@ -490,49 +472,55 @@ public class MainActivity extends Activity {
         final SharedPreferences aSharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         final SharedPreferences.Editor aEditor = aSharedPref.edit();
         String aAskForRating = aSharedPref.getString("ask_rating", "");
+        String aAskedInThisSession = aSharedPref.getString("this_session_asked_rating", "");
         if(aAskForRating.equalsIgnoreCase("y")){
-            Integer aNumberOfWordsMastered = aSharedPref.getInt("number_words_mastered", 0);
-            if(aNumberOfWordsMastered > 25){
+            if(!aAskedInThisSession.equalsIgnoreCase("y")) {
+                Integer aNumberOfWordsMastered = aSharedPref.getInt("number_words_mastered", 0);
+                if (aNumberOfWordsMastered > 25) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                View aRateDialogView = LayoutInflater.from(getBaseContext()).inflate(R.layout.dialog_rate_app,null);
-                builder.setView(aRateDialogView);
+                    aEditor.putString("this_session_asked_rating", "y");
+                    aEditor.commit();
 
-                final AlertDialog alert = builder.create();
-                alert.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    View aRateDialogView = LayoutInflater.from(getBaseContext()).inflate(R.layout.dialog_rate_app, null);
+                    builder.setView(aRateDialogView);
 
-                Button aYes = (Button) aRateDialogView.findViewById(R.id.bt_dra_yes);
-                aYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                        aEditor.putInt("number_words_mastered", 0);
-                        aEditor.commit();
-                        rateApplication();
-                    }
-                });
+                    final AlertDialog alert = builder.create();
+                    alert.show();
 
-                Button aLater = (Button) aRateDialogView.findViewById(R.id.bt_dra_later);
-                aLater.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                        aEditor.putInt("number_words_mastered", 0);
-                        aEditor.commit();
-                    }
-                });
+                    Button aYes = (Button) aRateDialogView.findViewById(R.id.bt_dra_yes);
+                    aYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.dismiss();
+                            aEditor.putInt("number_words_mastered", 0);
+                            aEditor.commit();
+                            rateApplication();
+                        }
+                    });
 
-                Button aNever = (Button) aRateDialogView.findViewById(R.id.bt_dra_never);
-                aNever.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                        aEditor.putInt("number_words_mastered", 0);
-                        aEditor.putString("ask_rating", "n");
-                        aEditor.commit();
-                    }
-                });
+                    Button aLater = (Button) aRateDialogView.findViewById(R.id.bt_dra_later);
+                    aLater.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.dismiss();
+                            aEditor.putInt("number_words_mastered", 10);
+                            aEditor.commit();
+                        }
+                    });
 
+                    Button aNever = (Button) aRateDialogView.findViewById(R.id.bt_dra_never);
+                    aNever.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.dismiss();
+                            aEditor.putInt("number_words_mastered", 0);
+                            aEditor.putString("ask_rating", "n");
+                            aEditor.commit();
+                        }
+                    });
+
+                }
             }
         }
     }

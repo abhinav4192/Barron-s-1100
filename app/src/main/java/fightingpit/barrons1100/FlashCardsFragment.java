@@ -133,6 +133,7 @@ public class FlashCardsFragment extends Fragment{
         Bundle bundle = new Bundle();
         bundle.putString("Word", mWordList.get(mRandomIndex).getWord());
         bundle.putString("Meaning", mWordList.get(mRandomIndex).getMeaning());
+        bundle.putString("Sentence", mWordList.get(mRandomIndex).getSentence());
         aBackFragment.setArguments(bundle);
 
         getFragmentManager()
@@ -141,7 +142,6 @@ public class FlashCardsFragment extends Fragment{
                         R.animator.card_flip_right_in, R.animator.card_flip_right_out,
                         R.animator.card_flip_left_in, R.animator.card_flip_left_out)
                 .replace(R.id.fl_fcf_cardView_holder, aBackFragment)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -280,7 +280,6 @@ public class FlashCardsFragment extends Fragment{
                                 R.animator.card_flip_right_in, R.animator.card_flip_right_out,
                                 R.animator.card_flip_left_in, R.animator.card_flip_left_out)
                         .replace(R.id.fl_fcf_cardView_holder, aFrontFragment)
-                        .addToBackStack(null)
                         .commit();
 
             }else{
@@ -292,7 +291,6 @@ public class FlashCardsFragment extends Fragment{
                                 R.animator.card_flip_right_in, R.animator.card_flip_right_out
                                 )
                         .replace(R.id.fl_fcf_cardView_holder, aFrontFragment)
-                        .addToBackStack(null)
                         .commit();
             }
 

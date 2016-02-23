@@ -81,7 +81,7 @@
             android:layout_height="35dp"
             android:text="Show Meaning"
             android:id="@+id/bt_fcf_show_meaning"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/cust_but_green"
             android:textColor="#FFF"
             android:layout_below="@+id/fl_fcf_cardView_holder"

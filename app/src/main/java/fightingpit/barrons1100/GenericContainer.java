@@ -8,6 +8,7 @@ public class GenericContainer {
     private String meaning;
     private boolean favourite;
     private Integer progress;
+    private String sentence;
 
     public GenericContainer() {
     }
@@ -33,6 +34,14 @@ public class GenericContainer {
 
     public void setMeaning(String meaning) {
         this.meaning = meaning;
+    }
+
+    public String getSentence() {
+        return sentence;
+    }
+
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
     }
 
     public boolean isFavourite() {

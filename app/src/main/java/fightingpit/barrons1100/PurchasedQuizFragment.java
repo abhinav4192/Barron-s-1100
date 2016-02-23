@@ -204,15 +204,16 @@ public class PurchasedQuizFragment extends Fragment {
     }
 
     @OnClick(R.id.bt_qpf_check) void onCheckClicked() {
-        for(int i=0; i< mRadioGroup.getChildCount(); i++)
-        {
-            mRadioGroup.getChildAt(i).setEnabled(false);
-        }
+
         int id = mRadioGroup.getCheckedRadioButtonId();
         if (id == -1){
             Toast.makeText(getActivity().getBaseContext(),"No option selected",Toast.LENGTH_LONG).show();
         }
         else{
+            for(int i=0; i< mRadioGroup.getChildCount(); i++)
+            {
+                mRadioGroup.getChildAt(i).setEnabled(false);
+            }
             mCheck.setVisibility(View.GONE);
             boolean isCorrect = false;
             String aMeaning = mWordList.get(mRandomIndex).getMeaning();

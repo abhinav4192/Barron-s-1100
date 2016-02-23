@@ -17,6 +17,7 @@ public class FlashCardBackFragment extends Fragment {
     @Bind(R.id.tv_fcb_word) TextView mWord;
     @Bind(R.id.tv_fcb_meaning) TextView mMeaning;
     @Bind(R.id.iv_fcb_fav) ImageView mFav;
+    @Bind(R.id.tv_fcb_sen) TextView mSentence;
 
 
     public FlashCardBackFragment() {
@@ -37,9 +38,11 @@ public class FlashCardBackFragment extends Fragment {
         Bundle bundle = getArguments();
         final String aWord = bundle.getString("Word");
         final String aMeaning = bundle.getString("Meaning");
+        final String aSentence = bundle.getString("Sentence");
 
         mWord.setText(aWord);
         mMeaning.setText(aMeaning);
+        mSentence.setText(aSentence);
 
         final DatabaseHelper aDBHelper = new DatabaseHelper(getActivity().getBaseContext());
         // Set appropriate Favourite Image
