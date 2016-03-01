@@ -857,7 +857,7 @@ INSERT INTO `WORD_LIST` VALUES ('Vindicate','show to be right by providing justi
 INSERT INTO `WORD_LIST` VALUES ('Virile','characterized by energy and vigor','The singing of it was so virile, so intense and so beautiful.',0,3,17);
 INSERT INTO `WORD_LIST` VALUES ('Virtuosity','technical skill or fluency or style exhibited by a virtuoso','Linkin Park gave a performance of considerable virtuosity.',0,3,18);
 INSERT INTO `WORD_LIST` VALUES ('Virulent','extremely poisonous or injurious; producing venom','The worst feature was a virulent outbreak of cholera in India.',0,3,19);
-INSERT INTO `WORD_LIST` VALUES ('Vitiate','make imperfect’,'Development programs have been vitiated by the rise in population.',0,3,20);
+INSERT INTO `WORD_LIST` VALUES ('Vitiate','make imperfect','Development programs have been vitiated by the rise in population.',0,3,20);
 INSERT INTO `WORD_LIST` VALUES ('Vitriolic','harsh or corrosive in tone','Vitriolic words can hurt feelings, break hearts, and even lead to violence.',0,3,1);
 INSERT INTO `WORD_LIST` VALUES ('Vituperation','abusive or venomous language to express blame or censure','It most certainly doesn’t deserve the waves of vituperation that it’s getting in the press.',0,3,2);
 INSERT INTO `WORD_LIST` VALUES ('Vivacious','vigorous and animated','The vivacious lilac still grows, unfolding its sweet-scented flowers each spring.',0,3,3);
