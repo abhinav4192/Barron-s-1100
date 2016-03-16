@@ -50,6 +50,12 @@ public class FlashCardsFragment extends Fragment{
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 

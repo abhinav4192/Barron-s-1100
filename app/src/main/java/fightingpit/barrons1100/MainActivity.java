@@ -525,7 +525,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
     void handlePopupMenu(){
 
         // Inflate a new popup.
@@ -569,8 +569,16 @@ public class MainActivity extends Activity {
         popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.setOutsideTouchable(true);
         popup.setFocusable(true);
-        popup.setBackgroundDrawable(new ColorDrawable(0xFFF2F2F2));
-        popup.setElevation(12);
+        popup.setBackgroundDrawable(new ColorDrawable(0xFFE0E4CC));
+
+        try{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                popup.setElevation(12);
+            }
+        }catch (Exception e){
+            Log.d("ABG","Exception Caught:" + e.toString());
+        }
+
         View aMenuView = findViewById(R.id.action_popup_menu);
         popup.showAsDropDown(aMenuView);
 

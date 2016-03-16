@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     android:animateLayoutChanges="true"
-    android:background="#e6e6e6">
+    android:background="#E0E4CC">
     <LinearLayout
         android:layout_width="match_parent"
+        android:minWidth="220dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -19,7 +20,7 @@
             android:id="@+id/textView"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textSize="16dp"/>
+            android:textSize="16sp"/>
         <Switch
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -44,17 +45,18 @@
             android:text="Daily at: "
             android:textColor="#000"
             android:layout_gravity="center_horizontal"
-            android:textSize="16dp"/>
+            android:textSize="16sp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="10:30 AM "
+            android:layout_marginRight="2dp"
             android:textColor="#000"
             android:id="@+id/tv_pr_reminder_time_view"
             android:layout_gravity="center_horizontal"
             android:gravity="right"
-            android:textSize="16dp"
+            android:textSize="16sp"
             />
 
     </LinearLayout>
@@ -76,7 +78,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:textSize="16dp"/>
+        android:textSize="16sp"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -95,6 +97,6 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:layout_marginBottom="4dp"
-        android:textSize="16dp"/>
+        android:textSize="16sp"/>
 
 </LinearLayout>

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 
 public class QuizFragment extends Fragment {
 
@@ -22,7 +21,6 @@ public class QuizFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.quiz_main_fragment, container, false);
-        ButterKnife.bind(this, rootView);
 
         SharedPreferences aSharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String aIsAppPurchased = aSharedPref.getString("is_app_purchased", "");
